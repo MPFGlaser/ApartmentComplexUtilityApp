@@ -1,12 +1,10 @@
-FROM nginx:stable-alpine
+FROM nginxinc/nginx-unprivileged:alpine
 
 WORKDIR /
 
-RUN addgroup -S acua && adduser -S acua -G acua
-
-USER acua
-
 COPY ./dist/apps/acua /usr/share/nginx/html
+
+COPY ./config/apps/acua/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
 
