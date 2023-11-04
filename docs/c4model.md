@@ -8,4 +8,4 @@ The Apartment Complex Utility App will be abbreviated as ACUA in this document.
 
 ## C2 - Container Diagram
 
-![Container Diagram](./media/c2-container.png)
+![Container Diagram](./media/c2-container.svg)
