@@ -4,7 +4,7 @@ The Apartment Complex Utility App will be abbreviated as ACUA in this document.
 
 ## C1 - System Context Diagram
 
-![System Context Diagram](./media/c1-context.png)
+![System Context Diagram](./media/c1-context.svg)
 
 ## C2 - Container Diagram
 
