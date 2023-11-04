@@ -1,0 +1,17 @@
+name: Check Version File
+on:
+  pull_request:
+    types: [synchronize]
+
+jobs:
+  check-version-file:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v3
+      - run: npm ci
+
+      - name: Check if version file was changed, if any package has changes compared to main.
+        run: bash scripts/check-version-file.sh
