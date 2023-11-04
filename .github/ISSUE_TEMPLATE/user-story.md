@@ -4,24 +4,25 @@ about: Write a user story
 title: ''
 labels: enhancement
 assignees: ''
-
 ---
 
 ### User Story
 
-**As a** [actor]  
+**As a** [actor]
 
-**I want to** [do thing]  
+**I want to** [do thing]
 
-**So that** [reason for doing thing]  
+**So that** [reason for doing thing]
 
 ### Description (optional)
 
-*Describe the issue in more detail...*
+<!-- Describe the issue in more detail... -->
 
 ### Acceptance Criteria
 
-- [ ] When should this be considered done?
+<!-- When should this be considered done? -->
+
+- [ ]
 
 ### Notes
 
