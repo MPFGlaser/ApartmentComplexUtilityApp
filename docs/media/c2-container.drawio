@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="7p8vAAi2lR7-AkH7PqvZ" name="Page-1">
-        <mxGraphModel dx="3152" dy="2544" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+        <mxGraphModel dx="1615" dy="2249" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -170,7 +170,7 @@
                 </mxCell>
                 <mxCell id="39" value="[TCP]&lt;br&gt;Communicates" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="38" vertex="1" connectable="0">
                     <mxGeometry x="0.039" relative="1" as="geometry">
-                        <mxPoint as="offset"/>
+                        <mxPoint y="-120" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="40" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" parent="1" source="42" target="7" edge="1">
