@@ -42,3 +42,6 @@ Thumbs.db
 
 # Ignore all local .env files
 **/.env
+
+# Ignore secrets/keys
+**/*.key*
