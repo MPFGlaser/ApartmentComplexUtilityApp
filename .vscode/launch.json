@@ -5,11 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach",
-            "port": 9229,
+            "name": "Attach to node",
+            "type": "node",
             "request": "attach",
-            "skipFiles": ["<node_internals>/**"],
-            "type": "node"
+            "restart": true,
+            "sourceMapPathOverrides": {
+                "webpack:///./~/*": "${webRoot}/node_modules/*", // a default
+                "webpack:///./*": "${webRoot}/js-src/*", // unsure how/why webpack generates ./links.js
+                "webpack:///../*": "${webRoot}/js-src/*", // unsure how/why webpack generates ../links.js
+                "webpack:///*": "*" // a default, catch everything else
+            }
         }
     ]
 }
