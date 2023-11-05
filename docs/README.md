@@ -15,3 +15,7 @@ The C4 model (currently a system context (C1) and container (C2) diagram) for AC
 A description of the messaging system used by ACUA can be found here:
 
 [Messaging](messaging.md)
+
+### Technology Choices (& Justfications)
+
+To read about the technology choices made for this project, click [here](technology_choices.md).
