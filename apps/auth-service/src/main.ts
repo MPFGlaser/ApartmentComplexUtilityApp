@@ -1,10 +1,5 @@
-import express from 'express';
-
-import healthRoute from './routes/health.route';
-import registerRoute from './routes/register.route';
-import loginRoute from './routes/login.route';
-import bodyParser from 'body-parser';
 import sequelize from './config/sequelize.init';
+import app from './app';
 
 (async () => {
     // Try to connect to the database and sync the models
@@ -17,21 +12,6 @@ import sequelize from './config/sequelize.init';
         console.error('Unable to connect to the database:', error);
         process.exit(1);
     }
-
-    const app = express();
-    // disable version number leak
-    app.disable('x-powered-by');
-
-    app.use(bodyParser.json());
-
-    // Routes
-    app.use('/register', registerRoute);
-    app.use('/login', loginRoute);
-    app.use('/health', healthRoute);
-
-    app.get('/', (req, res) => {
-        res.send({ message: 'Welcome to auth-service!' });
-    });
 
     const port = process.env.PORT || 3000;
     const server = app.listen(port, () => {
