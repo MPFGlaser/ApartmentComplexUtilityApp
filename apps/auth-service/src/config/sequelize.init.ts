@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-import { User } from '../models/User';
+import { User } from '../models/User.model';
 
 const sequelize = new Sequelize({
     dialect: 'postgres',

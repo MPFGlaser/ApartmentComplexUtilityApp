@@ -1,6 +1,6 @@
 import PromiseRouter from 'express-promise-router';
-import { registerController } from '../controllers/registerController';
-import { registerSchema } from '../validators/register';
+import { registerController } from '../controllers/register.controller';
+import { registerSchema } from '../validators/register.validator';
 import { validate } from '@acua/microservice-shared';
 
 const router = PromiseRouter();

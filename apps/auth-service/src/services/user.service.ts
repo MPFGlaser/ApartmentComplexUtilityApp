@@ -1,6 +1,9 @@
 import { ValidationError, ValidationErrorItem } from 'sequelize';
-import { User } from '../models/User';
-import { IRegistrationData, IUserNonSensitive } from '../interfaces/user';
+import { User } from '../models/User.model';
+import {
+    IRegistrationData,
+    IUserNonSensitive,
+} from '../interfaces/user.interface';
 import { pbkdf2, randomBytes, timingSafeEqual } from 'crypto';
 import { promisify } from 'util';
 import jwt, { Algorithm } from 'jsonwebtoken';

@@ -1,5 +1,5 @@
 import { Strategy as LocalStrategy } from 'passport-local';
-import userService from '../../services/userService';
+import userService from '../../services/user.service';
 
 export const localStrategy = new LocalStrategy(
     { usernameField: 'email' },

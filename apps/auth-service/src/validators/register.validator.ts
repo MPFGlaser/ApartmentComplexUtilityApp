@@ -1,5 +1,5 @@
 import { checkSchema } from 'express-validator';
-import userService from '../services/userService';
+import userService from '../services/user.service';
 
 export const registerSchema = checkSchema({
     firstName: {

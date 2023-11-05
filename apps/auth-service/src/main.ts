@@ -1,11 +1,10 @@
 import express from 'express';
 
-import healthRoute from './routes/health';
-import registerRoute from './routes/register';
-import loginRoute from './routes/login';
-import sequelize from './config/sequelize';
+import healthRoute from './routes/health.route';
+import registerRoute from './routes/register.route';
+import loginRoute from './routes/login.route';
 import bodyParser from 'body-parser';
-import passport from './middleware/passport.init';
+import sequelize from './config/sequelize.init';
 
 (async () => {
     // Try to connect to the database and sync the models
