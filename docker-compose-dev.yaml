@@ -1,0 +1,23 @@
+version: '3.1'
+name: acua-dev
+services:
+    authdb:
+        image: postgres:latest
+        restart: always
+        environment:
+            POSTGRES_USER: authdb
+            POSTGRES_PASSWORD: authdb
+            POSTGRES_DB: authdb
+        ports:
+            - 5432:5432
+        volumes:
+            - authdb-data:/var/lib/postgresql/data
+        healthcheck:
+            test: ['CMD', 'pg_isready', '-U', 'postgres']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
+
+volumes:
+    authdb-data:
