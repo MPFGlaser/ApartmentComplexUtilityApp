@@ -14,7 +14,11 @@
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
-        "paths": {}
+        "paths": {
+            "@acua/microservice-shared": [
+                "libs/microservice-shared/src/index.ts"
+            ]
+        }
     },
     "exclude": ["node_modules", "tmp"]
 }

@@ -1,4 +1,6 @@
-import { validationResult } from 'express-validator';
+import { NextFunction, Request, Response } from 'express';
+import { ValidationChain, validationResult } from 'express-validator';
+import { RunnableValidationChains } from 'express-validator/src/middlewares/schema';
 
 /**
  * Validate a request against a schema
@@ -8,15 +10,15 @@ import { validationResult } from 'express-validator';
  * @param schema an express-validator schema
  * @returns errors if any, otherwise the next middleware
  */
-export const validate = (schema) => {
+export const validate = (schema: RunnableValidationChains<ValidationChain>) => {
     return [
         schema,
-        (req, res, next) => {
+        (req: Request, res: Response, next: NextFunction) => {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({ errors: errors.array() });
             }
-            next();
+            return next();
         },
     ];
 };
