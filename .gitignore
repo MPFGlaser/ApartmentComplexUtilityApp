@@ -39,3 +39,6 @@ testem.log
 Thumbs.db
 
 .nx/cache
+
+# Ignore all local .env files
+**/.env
