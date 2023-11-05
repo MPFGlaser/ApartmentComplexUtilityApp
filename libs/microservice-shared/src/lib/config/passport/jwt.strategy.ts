@@ -1,0 +1,16 @@
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+
+const opts = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
+    secretOrKey: process.env.JWT_PUBLIC_KEY.replace(/\\n/g, '\n'),
+    algorithms: ['RS256'],
+};
+
+export const jwtStrategy = new JwtStrategy(opts, (jwt_payload, done) => {
+    // Verify the JWT payload
+    if (jwt_payload?.user) {
+        return done(null, jwt_payload.user);
+    } else {
+        return done(null, false);
+    }
+});

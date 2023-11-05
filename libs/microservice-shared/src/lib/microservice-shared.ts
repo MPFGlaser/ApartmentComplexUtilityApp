@@ -3,3 +3,4 @@ export function microserviceShared(): string {
 }
 
 export { validate } from './middleware/validate';
+export { jwtStrategy } from './config/passport/jwt.strategy';

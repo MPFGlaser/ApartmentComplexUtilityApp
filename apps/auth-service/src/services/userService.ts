@@ -1,8 +1,9 @@
 import { ValidationError, ValidationErrorItem } from 'sequelize';
 import { User } from '../models/User';
 import { IRegistrationData, IUserNonSensitive } from '../interfaces/user';
-import { pbkdf2, randomBytes } from 'crypto';
+import { pbkdf2, randomBytes, timingSafeEqual } from 'crypto';
 import { promisify } from 'util';
+import jwt, { Algorithm } from 'jsonwebtoken';
 
 const pbkdf2Async = promisify(pbkdf2);
 
@@ -37,7 +38,43 @@ class UserService {
     public async verifyPassword(storedPassword, providedPassword) {
         const [salt] = storedPassword.split('$');
         const hash = await this.hashPassword(providedPassword, salt);
-        return hash === storedPassword;
+        return timingSafeEqual(Buffer.from(hash), Buffer.from(storedPassword));
+    }
+
+    /**
+     * Get a user by email
+     * @param email {string} email to check
+     * @returns {Promise<User>} User object
+     */
+    public async getUserByEmail(email) {
+        return User.findOne({ where: { email } });
+    }
+
+    public async generateToken(user): Promise<string> {
+        const payload = {
+            user: {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+            },
+        };
+        const privateKey = process.env.JWT_PRIVATE_KEY.replace(/\\n/g, '\n');
+        const options = {
+            expiresIn: '1d',
+            algorithm: 'RS256' as Algorithm,
+        };
+
+        return new Promise((resolve, reject) => {
+            jwt.sign(payload, privateKey, options, (err, token) => {
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                } else {
+                    resolve(token);
+                }
+            });
+        });
     }
 
     /**

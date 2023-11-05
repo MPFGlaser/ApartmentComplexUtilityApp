@@ -2,8 +2,10 @@ import express from 'express';
 
 import healthRoute from './routes/health';
 import registerRoute from './routes/register';
+import loginRoute from './routes/login';
 import sequelize from './config/sequelize';
 import bodyParser from 'body-parser';
+import passport from './middleware/passport.init';
 
 (async () => {
     // Try to connect to the database and sync the models
@@ -18,12 +20,15 @@ import bodyParser from 'body-parser';
     }
 
     const app = express();
+    // disable version number leak
+    app.disable('x-powered-by');
 
     app.use(bodyParser.json());
 
     // Routes
-    app.use('/health', healthRoute);
     app.use('/register', registerRoute);
+    app.use('/login', loginRoute);
+    app.use('/health', healthRoute);
 
     app.get('/', (req, res) => {
         res.send({ message: 'Welcome to auth-service!' });
