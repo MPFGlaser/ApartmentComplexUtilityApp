@@ -1,8 +1,12 @@
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 
+if (process.env['JWT_PUBLIC_KEY'] === undefined) {
+    throw new Error('JWT_PUBLIC_KEY environment variable not set');
+}
+
 const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
-    secretOrKey: process.env.JWT_PUBLIC_KEY.replace(/\\n/g, '\n'),
+    secretOrKey: process.env['JWT_PUBLIC_KEY'].replace(/\\n/g, '\n'),
     algorithms: ['RS256'],
 };
 
