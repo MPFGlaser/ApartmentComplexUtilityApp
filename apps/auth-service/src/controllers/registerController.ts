@@ -1,7 +1,6 @@
 import userService from '../services/userService';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const registerController = (req, res, next) => {
+export const registerController = (req, res) => {
     userService
         .registerUser(req.body)
         .then((result) => res.send(result))
