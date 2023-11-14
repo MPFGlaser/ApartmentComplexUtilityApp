@@ -1,17 +1,19 @@
 # ApartmentComplexUtilityApp
 
-This repository will host the Apartment Complex Utility App, also known as ACUA.  
-It is a microservice-based application in which tenants can make repair requests, reserve amenities, set timers, and receive notifications. Building staff and building managers can, of course, manage these things.  
+This repository will host the Apartment Complex Utility App, also known as ACUA.
+It is a microservice-based application in which tenants can make repair requests, reserve amenities, set timers, and receive notifications. Building staff and building managers can, of course, manage these things.
 The purpose of this project is to educate myself about enterprise-grade software, microservice architectures and all that comes with it, such as deployments to Kubernetes.
 
 ## Setup
 
 Install all dependencies
+
 ```sh
 npm ci
 ```
 
 Set up the docker environment for development
+
 ```sh
 docker-compose -f docker-compose-dev.yaml up
 ```
@@ -27,6 +29,7 @@ To run an app in the monorepo, run the following command, substituted by the nam
 ```sh
 npx nx serve $app-name
 ```
+
 Example:
 
 ```sh
