@@ -19,3 +19,7 @@ A description of the messaging system used by ACUA can be found here:
 ### Technology Choices (& Justfications)
 
 To read about the technology choices made for this project, click [here](technology_choices.md).
+
+### Technology Impact Cycle Tool (TICT)
+
+A "Quick Scan" has been performed on the ACUA project using the [TICT tool](https://tict.io/). This helps to identify possible pitfalls or ethical issues within the project. The results of this scan can be found [here](./TICT/TICT_quick_scan.pdf).
