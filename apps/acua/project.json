@@ -6,11 +6,12 @@
   "targets": {
     "build": {
       "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/acua",
-        "generatePackageJson": true
+        "outputPath": "dist/apps/acua"
       },
       "configurations": {
         "development": {
@@ -22,7 +23,9 @@
       }
     },
     "docker-build": {
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "command": "docker build -f apps/acua/Dockerfile . -t acua"
     },
     "serve": {
@@ -59,7 +62,9 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/apps/acua"
@@ -67,9 +72,13 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/acua/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "apps/acua/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     },
     "serve-static": {
