@@ -1,10 +1,5 @@
 FROM node:lts-slim
 
-RUN addgroup -S nonroot \
-  && adduser -S nonroot -G nonroot
-
-USER nonroot
-
 WORKDIR /
 
 COPY ./dist/apps/auth-service ./
@@ -13,6 +8,8 @@ RUN npm ci --ignore-scripts
 
 # Install postgresql driver
 RUN npm install --save --ignore-scripts pg pg-hstore
+
+USER node
 
 ENV NODE_ENV production
 
