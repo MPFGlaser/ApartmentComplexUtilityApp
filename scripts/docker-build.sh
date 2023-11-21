@@ -23,13 +23,13 @@ path="./apps/$appname"
 chartpath="$path/Chart.yaml"
 
 # Check if the registry and app name were provided
-if [ $registry == "" ]; then
+if [ "$registry" == "" ]; then
     echo "Error: Registry URL is required"
     usage
     exit 1
 fi
 
-if [ $appname == "" ]; then
+if [ "$appname" == "" ]; then
     echo "Error: App name is required"
     usage
     exit 1
@@ -47,7 +47,7 @@ docker build -t "$imagename:${version}" -f "$path/Dockerfile" .
 # Tag the Docker image
 docker tag "$imagename:${version}" "$imagename:latest"
 
-if [ $extratag != "" ]; then
+if [ "$extratag" != "" ]; then
     docker tag "$imagename:${version}" "$imagename:${version}-${extratag}"
     docker tag "$imagename:${version}" "$imagename:${extratag}"
 fi
