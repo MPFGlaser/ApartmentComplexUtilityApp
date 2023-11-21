@@ -22,7 +22,7 @@
     },
     "docker-build": {
       "dependsOn": ["build"],
-      "command": "./scripts/docker-build.sh ${CONTAINER_REGISTRY} acua ${DOCKER_TAG_EXTRA}"
+      "command": "./scripts/docker-build.sh $CONTAINER_REGISTRY acua $DOCKER_TAG_EXTRA"
     },
     "serve": {
       "executor": "@nx/vite:dev-server",
