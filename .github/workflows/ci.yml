@@ -11,19 +11,25 @@ jobs:
       CONTAINER_REGISTRY: ${{ vars.CONTAINER_REGISTRY }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: 'Checkout'
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: nrwl/nx-set-shas@v3
-      - run: npm ci
-
-      - run: npx nx format:check
-      - run: npx nx affected -t lint --parallel=3
-      - run: npx nx affected -t test --parallel=3
+      - name: 'Set Shas'
+        uses: nrwl/nx-set-shas@v3
+      - name: 'Download Node Dependencies'
+        run: npm ci
+      - name: 'Formatting check'
+        run: npx nx format:check
+      - name: 'Run linting on affected projects'
+        run: npx nx affected -t lint --parallel=3
+      - name: 'Run tests on affected projects'
+        run: npx nx affected -t test --parallel=3
       - name: 'Login to GitHub Container Registry'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: npx nx affected -t docker-build --parallel=3
+      - name: 'Build Docker images for affected projects'
+        run: npx nx affected -t docker-build --parallel=3
