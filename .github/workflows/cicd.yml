@@ -43,7 +43,7 @@ jobs:
       - name: Deploy Ingress
         uses: WyriHaximus/github-action-helm3@v3
         with:
-          exec: helm upgrade --install ingress ./helm/ingress --wait --atomic --create-namespace --namespace=acua-${{ env.ENVIRONMENT }} --values=./helm/ingress/values.yaml --dependency-update
+          exec: helm upgrade --install ingress ./helm/ingress-nginx --wait --atomic --create-namespace --namespace=acua-${{ env.ENVIRONMENT }} --values=./helm/ingress-nginx/values.yaml --dependency-update
           kubeconfig: '${{ secrets.KUBECONFIG }}'
           overrule_existing_kubeconfig: 'true'
   CD-Services:
