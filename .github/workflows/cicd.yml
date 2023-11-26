@@ -42,17 +42,10 @@ jobs:
       matrix:
         service: ['acua', 'auth-service'] # Replace with your service names
     steps:
-      - name: 'Checkout' # Checkout the repository code.
-        uses: 'actions/checkout@v1'
-      - name: 'Deploy ${{ matrix.service }}'
-        uses: 'deliverybot/helm@master'
+      - uses: actions/checkout@v3
+      - name: Deploy
+        uses: WyriHaximus/github-action-helm3@v3
         with:
-          helm: 'helm3'
-          token: '${{ github.token }}'
-          secrets: '${{ toJSON(secrets) }}'
-          chart: '${{ matrix.service }}'
-          namespace: acua-${{ env.ENVIRONMENT }}
-          release: ${{ matrix.service }}
-          value-files: './helm/${{ matrix.service }}/${{ env.ENVIRONMENT }}-values.yml'
-        env:
-          KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+          exec: helm upgrade --install ${{ matrix.service }} ./helm/${{ matrix.service }} --wait --atomic --namespace=acua-${{ env.ENVIRONMENT }} --values=./helm/${{ matrix.service }}/${{ env.ENVIRONMENT }}-values.yaml --dependency-update
+          kubeconfig: '${{ secrets.KUBECONFIG }}'
+          overrule_existing_kubeconfig: 'true'
