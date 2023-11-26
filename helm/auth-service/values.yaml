@@ -59,8 +59,7 @@ ingress:
       paths:
         - path: /api/auth(/|$)(.*)
           pathType: ImplementationSpecific
-          backend:
-            servicePort: 3000
+
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

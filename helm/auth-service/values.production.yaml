@@ -10,5 +10,3 @@ ingress:
       paths:
         - path: /api/auth(/|$)(.*)
           pathType: ImplementationSpecific
-          backend:
-            servicePort: 3000
