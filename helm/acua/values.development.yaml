@@ -1,3 +1,6 @@
 ingress:
   hosts:
     - host: development.acua.mpfglaser.nl
+      paths:
+        - path: /
+          pathType: ImplementationSpecific

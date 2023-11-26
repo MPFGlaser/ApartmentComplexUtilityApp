@@ -7,3 +7,8 @@ autoscaling:
 ingress:
   hosts:
     - host: acua.mpfglaser.nl
+      paths:
+        - path: /api/auth(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            servicePort: 3000

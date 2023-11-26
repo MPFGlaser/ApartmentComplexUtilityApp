@@ -7,3 +7,6 @@ autoscaling:
 ingress:
   hosts:
     - host: acua.mpfglaser.nl
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
