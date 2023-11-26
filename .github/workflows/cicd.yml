@@ -34,6 +34,7 @@ jobs:
       - name: 'Build Docker images for affected projects'
         run: npx nx affected -t docker-build --parallel=3
   CD:
+    needs: CI
     env:
       ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'staging' || startsWith(github.ref, 'refs/tags/release-') && 'production' || github.event_name == 'pull_request' && 'development' }}
     runs-on: 'ubuntu-latest'
@@ -46,6 +47,7 @@ jobs:
       - name: 'Deploy ${{ matrix.service }}'
         uses: 'deliverybot/helm@master'
         with:
+          helm: 'helm3'
           token: '${{ github.token }}'
           secrets: '${{ toJSON(secrets) }}'
           chart: '${{ matrix.service }}'
