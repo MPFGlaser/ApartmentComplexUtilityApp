@@ -1,0 +1,3 @@
+ingress:
+  hosts:
+    - host: development.acua.mpfglaser.nl
