@@ -33,8 +33,21 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Build Docker images for affected projects'
         run: npx nx affected -t docker-build --parallel=3
-  CD:
+  CD-Ingress:
     needs: CI
+    env:
+      ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'staging' || startsWith(github.ref, 'refs/tags/release-') && 'production' || github.event_name == 'pull_request' && 'development' }}
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy Ingress
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm upgrade --install ingress ./helm/ingress --wait --atomic --create-namespace --namespace=acua-${{ env.ENVIRONMENT }} --values=./helm/ingress/values.yaml --dependency-update
+          kubeconfig: '${{ secrets.KUBECONFIG }}'
+          overrule_existing_kubeconfig: 'true'
+  CD-Services:
+    needs: CD-Ingress
     env:
       ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'staging' || startsWith(github.ref, 'refs/tags/release-') && 'production' || github.event_name == 'pull_request' && 'development' }}
     runs-on: 'ubuntu-latest'
@@ -43,7 +56,13 @@ jobs:
         service: ['acua', 'auth-service'] # Replace with your service names
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy
+      - name: Deploy Ingress
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm upgrade --install ingress ./helm/ingress --wait --atomic --create-namespace --namespace=acua-${{ env.ENVIRONMENT }} --values=./helm/ingress/values.yaml --dependency-update
+          kubeconfig: '${{ secrets.KUBECONFIG }}'
+          overrule_existing_kubeconfig: 'true'
+      - name: Deploy Services
         uses: WyriHaximus/github-action-helm3@v3
         with:
           exec: helm upgrade --install ${{ matrix.service }} ./helm/${{ matrix.service }} --wait --atomic --create-namespace --namespace=acua-${{ env.ENVIRONMENT }} --values=./helm/${{ matrix.service }}/values.${{ env.ENVIRONMENT }}.yaml --dependency-update
