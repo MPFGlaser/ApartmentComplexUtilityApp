@@ -24,6 +24,15 @@ To read about the technology choices made for this project, click [here](technol
 
 A "Quick Scan" has been performed on the ACUA project using the [TICT tool](https://tict.io/). This helps to identify possible pitfalls or ethical issues within the project. The results of this scan can be found [here](./TICT/TICT_quick_scan.pdf).
 
+## Deployment
+
+The application is deployed onto a Kubernetes cluster using the Github Actions workflow. This workflow is triggered on each pull request, on the main branch, and on releases. This ensures a DTAP (Development, Testing, Acceptance, Production) structure in the project.
+To ensure no downtime, a rolling update strategy is used. It is configured in such a way that a pod will not go offline until a new one (with an updated version) is online and confirmed to be working using the health check.
+
+### Templating
+
+To allow for different environments, templating using Helm is utilised within this project.
+
 ## UI Design
 
 Some very rough wireframes have been created for the UI of ACUA. These can be found [here](./media/wireframes/wireframes.png).
