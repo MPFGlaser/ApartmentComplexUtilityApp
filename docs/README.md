@@ -23,3 +23,7 @@ To read about the technology choices made for this project, click [here](technol
 ### Technology Impact Cycle Tool (TICT)
 
 A "Quick Scan" has been performed on the ACUA project using the [TICT tool](https://tict.io/). This helps to identify possible pitfalls or ethical issues within the project. The results of this scan can be found [here](./TICT/TICT_quick_scan.pdf).
+
+## UI Design
+
+Some very rough wireframes have been created for the UI of ACUA. These can be found [here](./media/wireframes/wireframes.png).
