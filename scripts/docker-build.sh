@@ -20,7 +20,7 @@ extratag=$3
 
 # Set path to app and Chart.yaml
 path="./apps/$appname"
-chartpath="$path/Chart.yaml"
+chartpath="./helm/$appname/Chart.yaml"
 
 # Check if the registry and app name were provided
 if [ "$registry" == "" ]; then
