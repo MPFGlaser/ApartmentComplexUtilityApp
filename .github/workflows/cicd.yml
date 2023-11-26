@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 on:
   push:
     branches:
@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  main:
+  CI:
     env:
       CONTAINER_REGISTRY: ${{ vars.CONTAINER_REGISTRY }}
     runs-on: ubuntu-latest
@@ -33,3 +33,24 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Build Docker images for affected projects'
         run: npx nx affected -t docker-build --parallel=3
+  CD:
+    env:
+      ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'staging' || startsWith(github.ref, 'refs/tags/release-') && 'production' || github.event_name == 'pull_request' && 'development' }}
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        service: ['acua', 'auth-service'] # Replace with your service names
+    steps:
+      - name: 'Checkout' # Checkout the repository code.
+        uses: 'actions/checkout@v1'
+      - name: 'Deploy ${{ matrix.service }}'
+        uses: 'deliverybot/helm@master'
+        with:
+          token: '${{ github.token }}'
+          secrets: '${{ toJSON(secrets) }}'
+          chart: '${{ matrix.service }}'
+          namespace: acua-${{ env.ENVIRONMENT }}
+          release: ${{ matrix.service }}
+          value-files: './helm/${{ matrix.service }}/${{ env.ENVIRONMENT }}-values.yml'
+        env:
+          KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
