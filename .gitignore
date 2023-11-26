@@ -49,3 +49,4 @@ Thumbs.db
 # Helm
 *.tgz
 charts/*.tgz
+**/values.local.yaml
