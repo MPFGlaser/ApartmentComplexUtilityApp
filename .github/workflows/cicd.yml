@@ -46,6 +46,6 @@ jobs:
       - name: Deploy
         uses: WyriHaximus/github-action-helm3@v3
         with:
-          exec: helm upgrade --install ${{ matrix.service }} ./helm/${{ matrix.service }} --wait --atomic --create-namespace=acua-${{ env.ENVIRONMENT }} --values=./helm/${{ matrix.service }}/values.${{ env.ENVIRONMENT }}.yaml --dependency-update
+          exec: helm upgrade --install ${{ matrix.service }} ./helm/${{ matrix.service }} --wait --atomic --create-namespace --namespace=acua-${{ env.ENVIRONMENT }} --values=./helm/${{ matrix.service }}/values.${{ env.ENVIRONMENT }}.yaml --dependency-update
           kubeconfig: '${{ secrets.KUBECONFIG }}'
           overrule_existing_kubeconfig: 'true'
