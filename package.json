@@ -22,7 +22,7 @@
         "react-dom": "18.2.0",
         "reflect-metadata": "^0.1.13",
         "sequelize": "^6.34.0",
-        "sequelize-typescript": "^2.1.5",
+        "sequelize-typescript": "^2.1.6",
         "tslib": "^2.3.0"
     },
     "devDependencies": {
