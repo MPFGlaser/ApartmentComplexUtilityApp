@@ -36,3 +36,7 @@ To allow for different environments, templating using Helm is utilised within th
 ## UI Design
 
 Some very rough wireframes have been created for the UI of ACUA. These can be found [here](./media/wireframes/wireframes.png).
+
+## Risk Assessment
+
+A risk assessment has been made for this project. It can be found [here](./risk_assessment.md).
