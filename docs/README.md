@@ -40,3 +40,7 @@ Some very rough wireframes have been created for the UI of ACUA. These can be fo
 ## Risk Assessment
 
 A risk assessment has been made for this project. It can be found [here](./risk_assessment.md).
+
+## GDPR Check
+
+In order to ensure that the ACUA project is GDPR compliant, a GDPR check has been performed. This check can be found [here](./gdpr.md).
