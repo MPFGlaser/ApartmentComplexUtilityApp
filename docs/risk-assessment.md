@@ -28,6 +28,7 @@ Lastly, potential threats will be identified and categorised as either external,
     - [External](#external)
     - [Internal](#internal)
     - [Environmental](#environmental)
+  - [Advisories](#advisories)
 
 ## CIA Triad
 
@@ -134,6 +135,11 @@ To mitigate this, training should be provided to employees. This training should
 Furthermore, the principle of least privilege should be applied. This means that employees should only have access to the data that they need to do their job. <br>
 This helps to ensure that human error is kept to a minimum. <br>
 
+**Vulnerable Code Patterns**
+
+Vulnerable code patterns could be introduced by developers. This could be done by using a vulnerable library, or by writing vulnerable code. <br>
+To mitigate this, developers should read up on common mistakes/vulnerabilities, and use should be made of static code analysis tools such as Sonar. <br>
+
 ### Environmental
 
 **Natural Disaster**
@@ -147,3 +153,13 @@ An exception to this is a worldwide disaster such as a nuclear war, in which cas
 A power outage could cause the application to become unavailable. This could be caused by a power outage in the datacentre, or by a power outage in the building where the application is being used. <br>
 To mitigate this, the application should be hosted in multiple datacentres in different locations. This ensures that if one datacentre loses power, the application can still be accessed from another datacentre. <br>
 If deemed worth the cost, the choice could be made to go with a specific hosting provider that ensures back-up power in case of a power outage. <br>
+
+## Advisories
+
+In order to provide a good application on all fronts, the following advisories should be followed:
+
+- Implement 2FA, enforce use for all sensitive roles (anything beyond a normal tenant).
+- Implement data validation on all endpoints.
+- Keep dependencies up to date using a tool such as dependabot.
+- Use static code analysis (e.g., Sonar) to detect vulnerable code patterns.
+- Design a disaster recovery procedure.
