@@ -237,3 +237,20 @@ There are no automated decisions about people, or decisions about people at all.
 No further action is needed.
 
 </details>
+
+## Advice (summary):
+
+Below, in no particular order, a list of advised actions based on the report above is given.
+
+- Report on what information is collected, where it is stored, and who has access to it.
+- Write a privacy policy.
+- Keep data protection in mind at all times.
+- Add the option to anonymise user's names to non-privileged users.
+- Create an internal security policy.
+- Read up on when to conduct a data protection impact assessment and create a process to carry it out.
+- Set up a procedure to notify the authorities and/or customers in the event of a data breach.
+- Make preparations for the appointment of a person responsible for GDPR compliance when the business grows to a sufficient size.
+- Carefully read the terms of service when using third-party services to process personal data.
+- Make preparations for the appointment of a DPO when the business grows to a sufficient size.
+- Design and implement a mechanism that allows data take-out.
+- Implement data deletion.
