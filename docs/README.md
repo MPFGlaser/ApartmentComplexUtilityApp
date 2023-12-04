@@ -44,3 +44,7 @@ A risk assessment has been made for this project. It can be found [here](./risk_
 ## GDPR Check
 
 In order to ensure that the ACUA project is GDPR compliant, a GDPR check has been performed. This check can be found [here](./gdpr.md).
+
+## OWASP Top 10
+
+To ensure that the most commonly found mistakes are not made in ACUA, the OWASP Top 10 list was consulted. While this is by no means an exhaustive list, it does cover the most common vulnerabilities as mentioned before. The results of this can be found [here](./owasp-top-10.md).
