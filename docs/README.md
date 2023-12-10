@@ -52,3 +52,7 @@ To ensure that the most commonly found mistakes are not made in ACUA, the OWASP 
 ## Misuse Cases
 
 Some misuse cases have been identified for ACUA. These can be found [here](./misuse-cases.md).
+
+## Security Requirements
+
+Based on the above documents, some security requirements have been identified. These can be found [here](./security-requirements.md).
