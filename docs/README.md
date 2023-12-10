@@ -48,3 +48,7 @@ In order to ensure that the ACUA project is GDPR compliant, a GDPR check has bee
 ## OWASP Top 10
 
 To ensure that the most commonly found mistakes are not made in ACUA, the OWASP Top 10 list was consulted. While this is by no means an exhaustive list, it does cover the most common vulnerabilities as mentioned before. The results of this can be found [here](./owasp-top-10.md).
+
+## Misuse Cases
+
+Some misuse cases have been identified for ACUA. These can be found [here](./misuse-cases.md).
