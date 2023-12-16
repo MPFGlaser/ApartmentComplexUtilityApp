@@ -1,7 +1,0 @@
-ingress:
-  hosts:
-    - host: development.acua.mpfglaser.nl
-      paths:
-        - path: /api/auth(/|$)(.*)
-          pathType: ImplementationSpecific
-

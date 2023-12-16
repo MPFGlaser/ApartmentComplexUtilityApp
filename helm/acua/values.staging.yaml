@@ -1,6 +1,0 @@
-ingress:
-  hosts:
-    - host: staging.acua.mpfglaser.nl
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
