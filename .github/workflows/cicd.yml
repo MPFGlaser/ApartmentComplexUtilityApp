@@ -43,13 +43,12 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBECONFIG }}
-      - name: Set example secret
-        uses: azure/k8s-create-secret@v4
-        with:
-          namespace: acua
-          secret-name: demo-k8s-secret
-          data: lorem-ipsum
-      # Deploy to Kubernetes
+      # - name: Set example secret
+      #   uses: azure/k8s-create-secret@v4
+      #   with:
+      #     namespace: acua
+      #     secret-name: demo-k8s-secret
+      #     data: lorem-ipsum
       - name: Deploy to Kubernetes cluster
         uses: Azure/k8s-deploy@v4.10.0
         with:
