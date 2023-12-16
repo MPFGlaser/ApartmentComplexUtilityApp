@@ -45,8 +45,3 @@ Thumbs.db
 
 # Ignore secrets/keys
 **/*.key*
-
-# Helm
-*.tgz
-charts/*.tgz
-**/values.local.yaml

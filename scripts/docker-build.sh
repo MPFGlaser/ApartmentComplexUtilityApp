@@ -18,9 +18,8 @@ registry=$1
 appname=$2
 extratag=$3
 
-# Set path to app and Chart.yaml
+# Set path to app
 path="./apps/$appname"
-chartpath="./helm/$appname/Chart.yaml"
 
 # Check if the registry and app name were provided
 if [ "$registry" == "" ]; then
@@ -35,8 +34,8 @@ if [ "$appname" == "" ]; then
     exit 1
 fi
 
-# Read the version from the Chart.yaml file
-version=$(yq -r '.appVersion' "$chartpath")
+# Read the version file
+version=$(cat "$path/version")
 
 # Example: registry.example.com/my-app
 imagename="$registry/$appname"
