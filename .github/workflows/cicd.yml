@@ -53,5 +53,6 @@ jobs:
         uses: Azure/k8s-deploy@v4.10.0
         with:
           action: deploy
+          namespace: acua
           manifests: |
             kubernetes
