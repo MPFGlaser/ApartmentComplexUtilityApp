@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: acua
+    version: "1.0"
+  name: acua
+  namespace: acua
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acua
+      version: "1.0"
+  template:
+    metadata:
+      labels:
+        app: acua
+        version: "1.0"
+    spec:
+      containers:
+      - name: acua
+        image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/acua:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: acua
+  name: acua
+  namespace: acua
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: acua
