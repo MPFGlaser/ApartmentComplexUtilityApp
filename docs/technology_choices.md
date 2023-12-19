@@ -32,3 +32,10 @@ This project will use Kafka as its message broker, mostly due to it seeming to b
 ### NX
 
 I chose NX since it fits with the all-TypeScript (or JavaScript) approach I am taking with this project. It has the distinct advantage of the `nx affected` command, which helps me run only the test/build jobs on packages that were affected by my changes. This is a huge time-saver, and will help with keeping separate versions for each services' docker image.
+
+## Cloud
+
+### Azure
+
+I chose Azure as my cloud provider because it is the "recommended default" at Fontys, as they advertise the free credit on the portal, as well as giving workshops on it. This means I can get help from both students and teachers if I run into any problems. <br>
+An analysis of the different available providers can be found [here](./analyses/cloud-host.md).
