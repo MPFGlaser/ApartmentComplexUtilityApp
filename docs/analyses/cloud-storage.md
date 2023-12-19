@@ -25,7 +25,8 @@ Also an option, but not on the same host as the application.
 
 ### Open source, S3-compatible storage
 
-There are many open source S3-compatible storage solutions, such as MinIO, which allow for self-hosting. It might not be the best option in all cases, but when vendor lock-in is a concern, it is a good option.
+There are many open source S3-compatible storage solutions, such as MinIO, which allow for self-hosting. It might not be the best option in all cases, but when vendor lock-in is a concern, it is a good option. MinIO also support Keycloak, which might end up being the identity provider of choice for this project. <br>
+There are also open-source s3 proxies available, such as [s3proxy](https://github.com/gaul/s3proxy), which allow the application to use S3 API calls, while using a storage solution such as Azure Blob Storage under the hood.
 
 ## Conclusion
 
