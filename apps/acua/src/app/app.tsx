@@ -1,11 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Outlet } from 'react-router-dom';
-import styles from './app.module.scss';
+import Navigation from '../components/navigation/Navigation';
 
 export function App() {
   return (
     <div>
-      <Outlet />
+      <Navigation>
+        <Outlet />
+      </Navigation>
     </div>
   );
 }
