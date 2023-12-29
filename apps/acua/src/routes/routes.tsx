@@ -23,7 +23,8 @@ const utilityRoutes = [
   },
   { path: '/tickets/edit/:id', element: <Editor /> },
   { path: '/tickets/create', element: <Editor /> },
-  { path: '*', element: <Notfound /> },
+  { path: '/not-found', element: <Notfound /> },
+  { path: '*', element: <Navigate to="/not-found" replace /> },
 ];
 
 export const routes = [...navRoutes, ...utilityRoutes];
