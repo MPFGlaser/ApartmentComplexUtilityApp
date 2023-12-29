@@ -8,7 +8,7 @@ import Editor from '../components/Tickets/Editor/Editor';
 import { Navigate } from 'react-router-dom';
 
 export const navRoutes = [
-  { path: '/', element: <Landing />, name: 'Landing', icon: <HomeIcon /> },
+  { path: '/', element: <Landing />, name: 'Home', icon: <HomeIcon /> },
   {
     path: '/tickets',
     element: <TicketOverview />,
