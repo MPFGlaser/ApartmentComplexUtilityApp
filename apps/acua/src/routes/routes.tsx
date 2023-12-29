@@ -5,6 +5,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import Detail from '../components/Tickets/Detail/Detail';
 import Editor from '../components/Tickets/Editor/Editor';
+import { Navigate } from 'react-router-dom';
 
 export const navRoutes = [
   { path: '/', element: <Landing />, name: 'Landing', icon: <HomeIcon /> },
@@ -28,3 +29,26 @@ const utilityRoutes = [
 ];
 
 export const routes = [...navRoutes, ...utilityRoutes];
+
+export const breadcrumbNameMap = [
+  {
+    path: '/tickets',
+    breadcrumbName: 'Repair Requests',
+    hasDynamicPart: false,
+  },
+  {
+    path: '/tickets/view',
+    breadcrumbName: 'Details',
+    hasDynamicPart: true,
+  },
+  {
+    path: '/tickets/edit',
+    breadcrumbName: 'Edit Repair Request',
+    hasDynamicPart: true,
+  },
+  {
+    path: '/tickets/create',
+    breadcrumbName: 'New',
+    hasDynamicPart: false,
+  },
+];
