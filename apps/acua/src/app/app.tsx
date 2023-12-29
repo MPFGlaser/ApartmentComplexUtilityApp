@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Outlet } from 'react-router-dom';
-import Navigation from '../components/navigation/Navigation';
+import Navigation from '../components/Navigation/Navigation';
 
 export function App() {
   return (
