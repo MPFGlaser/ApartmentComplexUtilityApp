@@ -33,7 +33,7 @@ export function Landing(props: LandingProps) {
               <CardMedia
                 component="img"
                 height="140"
-                image="/public/images/repair.jpg"
+                image="/images/repair.jpg"
                 alt="Pliers and a hammer"
               />
               <CardContent>
@@ -54,7 +54,7 @@ export function Landing(props: LandingProps) {
               <CardMedia
                 component="img"
                 height="140"
-                image="/public/images/couple.jpg"
+                image="/images/couple.jpg"
                 alt="A happy looking couple holding mugs, relaxing on a bench with a dog."
                 sx={{ objectPosition: 'top' }}
               />
