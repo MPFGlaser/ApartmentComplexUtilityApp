@@ -46,3 +46,13 @@ An analysis of the different available providers can be found [here](./analyses/
 
 I chose to use MinIO as my cloud storage solution because it is open source, and it is S3-compatible. This means that if I ever want to migrate to AWS, it will be easy to do so. If I choose not to migrate to AWS, it will still be robust. In the end, it avoids vendor lock in. <br>
 An analysis of the different available providers can be found [here](./analyses/cloud-storage.md).
+
+### Update 2024-01-02
+
+Due to the time constraints of this project, combined with the knowledge I already have of the Google Cloud Platform, I have decided to switch to GCP. This means that I will be using Google Kubernetes Engine instead of Azure Kubernetes Service. <br>
+Cloud storage, if implemented, will use Google Cloud Storage buckets instead of MinIO/S3, and authentication/identity management will be handled by Firebase Authentication.
+
+### Identity Provider
+
+I chose to use Firebase Authentication due to its low cost and big featureset. While I am not happy with the vendor lock-in, it is the most sensible choice time-wise. <br>
+The analysis of the different available providers can be found [here](./analyses/identity-provider.md).
