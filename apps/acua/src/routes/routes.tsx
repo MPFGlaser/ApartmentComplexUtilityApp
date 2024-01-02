@@ -4,8 +4,9 @@ import Notfound from './NotFound/NotFound';
 import HomeIcon from '@mui/icons-material/Home';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import Detail from '../components/Tickets/Detail/Detail';
-import Editor from '../components/Tickets/Editor/Editor';
+import { Editor as TicketEditor } from '../components/Tickets/Editor/Editor';
 import { Navigate } from 'react-router-dom';
+import { Editor as ProfileEditor } from '../components/Profile/Editor/Editor';
 
 export const navRoutes = [
   { path: '/', element: <Landing />, name: 'Home', icon: <HomeIcon /> },
@@ -22,8 +23,9 @@ const utilityRoutes = [
     path: '/tickets/view/:id',
     element: <Detail />,
   },
-  { path: '/tickets/edit/:id', element: <Editor /> },
-  { path: '/tickets/create', element: <Editor /> },
+  { path: '/tickets/edit/:id', element: <TicketEditor /> },
+  { path: '/tickets/create', element: <TicketEditor /> },
+  { path: '/edit-profile', element: <ProfileEditor /> },
   { path: '/not-found', element: <Notfound /> },
   { path: '*', element: <Navigate to="/not-found" replace /> },
 ];
@@ -49,6 +51,11 @@ export const breadcrumbNameMap = [
   {
     path: '/tickets/create',
     breadcrumbName: 'New',
+    hasDynamicPart: false,
+  },
+  {
+    path: '/edit-profile',
+    breadcrumbName: 'Profile',
     hasDynamicPart: false,
   },
 ];
