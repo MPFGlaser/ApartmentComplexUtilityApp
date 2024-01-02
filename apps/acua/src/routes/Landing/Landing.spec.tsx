@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react';
 
-import App from './app';
+import Landing from './Landing';
 import { MemoryRouter } from 'react-router-dom';
 
-describe('App', () => {
+describe('Landing', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<App />, { wrapper: MemoryRouter });
+    const { baseElement } = render(<Landing />, { wrapper: MemoryRouter });
     expect(baseElement).toBeTruthy();
   });
 });

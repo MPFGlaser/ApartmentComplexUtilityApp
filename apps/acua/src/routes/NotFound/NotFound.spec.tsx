@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react';
 
-import App from './app';
+import Notfound from './NotFound';
 import { MemoryRouter } from 'react-router-dom';
 
-describe('App', () => {
+describe('Notfound', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<App />, { wrapper: MemoryRouter });
+    const { baseElement } = render(<Notfound />, { wrapper: MemoryRouter });
     expect(baseElement).toBeTruthy();
   });
 });

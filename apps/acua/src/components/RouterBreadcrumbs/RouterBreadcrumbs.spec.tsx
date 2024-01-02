@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react';
 
-import App from './app';
+import Breadcrumbs from './RouterBreadcrumbs';
 import { MemoryRouter } from 'react-router-dom';
 
-describe('App', () => {
+describe('Breadcrumbs', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<App />, { wrapper: MemoryRouter });
+    const { baseElement } = render(<Breadcrumbs />, { wrapper: MemoryRouter });
     expect(baseElement).toBeTruthy();
   });
 });

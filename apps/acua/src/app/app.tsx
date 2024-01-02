@@ -1,12 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.scss';
-
-import NxWelcome from './nx-welcome';
+import { Outlet } from 'react-router-dom';
+import Navigation from '../components/Navigation/Navigation';
+import RouterBreadcrumbs from '../components/RouterBreadcrumbs/RouterBreadcrumbs';
 
 export function App() {
   return (
     <div>
-      <NxWelcome title="acua" />
+      <Navigation>
+        <RouterBreadcrumbs />
+        <Outlet />
+      </Navigation>
     </div>
   );
 }
