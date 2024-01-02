@@ -55,7 +55,7 @@ export function Landing(props: LandingProps) {
                 component="img"
                 height="140"
                 image="/public/images/couple.jpg"
-                alt="Pliers and a hammer"
+                alt="A happy looking couple holding mugs, relaxing on a bench with a dog."
                 sx={{ objectPosition: 'top' }}
               />
               <CardContent>
