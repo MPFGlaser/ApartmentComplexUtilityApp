@@ -24,7 +24,7 @@ interface NavigationProps {
   children?: React.ReactNode;
 }
 
-export default function Navigation(props: NavigationProps) {
+export default function Navigation(props: Readonly<NavigationProps>) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
