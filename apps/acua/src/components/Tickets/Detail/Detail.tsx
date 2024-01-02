@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Box,
   Container,
@@ -17,12 +18,12 @@ export interface DetailProps {}
 
 export function Detail(props: DetailProps) {
   const [status, setStatus] = React.useState('Open');
-  const [createDate] = React.useState('2023-12-29');
-  const [updateDate] = React.useState('2023-12-29');
-  const [author] = React.useState('John Doe');
-  const [location] = React.useState('Apartment 2, Kitchen');
-  const [title] = React.useState('Broken sink');
-  const [description] = React.useState(
+  const [createDate, setCreateDate] = React.useState('2023-12-29');
+  const [updateDate, setUpdateDate] = React.useState('2023-12-29');
+  const [author, setAuthor] = React.useState('John Doe');
+  const [location, setLocation] = React.useState('Apartment 2, Kitchen');
+  const [title, setTitle] = React.useState('Broken sink');
+  const [description, setDescription] = React.useState(
     "My sink is broken and the water won't drain out properly. Please come and fix it. Thank you!"
   );
 
