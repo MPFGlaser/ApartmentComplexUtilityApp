@@ -1,18 +1,10 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import Table from '../../components/Tickets/Table/Table';
 import { Link } from 'react-router-dom';
+import { Ticket } from '../../types/Ticket';
 
 /* eslint-disable-next-line */
 export interface TicketOverviewProps {}
-
-type Ticket = {
-  id: number;
-  title: string;
-  author: string;
-  date: string;
-  updateDate: string;
-  status: string;
-};
 
 const tickets: Ticket[] = [
   {

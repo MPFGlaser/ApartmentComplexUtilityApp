@@ -1,5 +1,6 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
+import { Ticket } from '../../../types/Ticket';
 
 /* eslint-disable-next-line */
 export interface TableProps {}
@@ -10,10 +11,10 @@ const columns = [
   { field: 'status', headerName: 'Status', width: 100 },
 ];
 
-function Table({ tickets }) {
+function Table({ tickets }: { tickets: Ticket[] }) {
   const navigate = useNavigate();
 
-  const handleRowClick = (param) => {
+  const handleRowClick = (param: { id: number | string }) => {
     navigate(`/tickets/view/${param.id}`);
   };
 
