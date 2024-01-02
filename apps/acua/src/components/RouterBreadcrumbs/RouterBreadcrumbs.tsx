@@ -1,7 +1,8 @@
-import { Link, LinkProps, Typography } from '@mui/material';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Typography } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { breadcrumbNameMap } from '../../routes/routes';
+import { LinkRouter } from './LinkRouter';
 
 /* eslint-disable-next-line */
 export interface BreadcrumbsProps {}
@@ -13,15 +14,6 @@ export function RouterBreadcrumbs(props: BreadcrumbsProps) {
   // Don't show breadcrumbs on the Not Found page
   if (location.pathname === '/not-found') {
     return null;
-  }
-
-  interface LinkRouterProps extends LinkProps {
-    to: string;
-    replace?: boolean;
-  }
-
-  function LinkRouter(props: LinkRouterProps) {
-    return <Link {...props} component={NavLink as any} />;
   }
 
   return (
