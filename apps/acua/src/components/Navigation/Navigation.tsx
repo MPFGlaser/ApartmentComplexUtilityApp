@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   AppBar,
   Box,
@@ -23,7 +23,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import { navRoutes } from '../../routes/routes';
 import { auth } from '../../util/firebase';
-import { User } from 'firebase/auth';
 import { useUser } from '../../util/UserContext';
 
 const drawerWidth = 240;

@@ -18,7 +18,6 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updateProfile } from 'firebase/auth';
 import { useUser } from '../../../util/UserContext';
-import { auth } from '../../../util/firebase';
 
 /* eslint-disable-next-line */
 export interface EditorProps {}
