@@ -41,8 +41,6 @@ export function Signup(props: LoginProps) {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [terms, setTerms] = useState(false);
 
-  const [showPassword, setShowPassword] = React.useState(false);
-
   const [snackbarVisiblity, setSnackbarVisiblity] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
