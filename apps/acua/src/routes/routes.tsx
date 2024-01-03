@@ -7,6 +7,7 @@ import Detail from '../components/Tickets/Detail/Detail';
 import { Editor as TicketEditor } from '../components/Tickets/Editor/Editor';
 import { Navigate } from 'react-router-dom';
 import { Editor as ProfileEditor } from '../components/Profile/Editor/Editor';
+import Login from './Login/Login';
 
 export const navRoutes = [
   { path: '/', element: <Landing />, name: 'Home', icon: <HomeIcon /> },
@@ -27,6 +28,7 @@ const utilityRoutes = [
   { path: '/tickets/create', element: <TicketEditor /> },
   { path: '/edit-profile', element: <ProfileEditor /> },
   { path: '/not-found', element: <Notfound /> },
+  { path: '/login', element: <Login /> },
   { path: '*', element: <Navigate to="/not-found" replace /> },
 ];
 
