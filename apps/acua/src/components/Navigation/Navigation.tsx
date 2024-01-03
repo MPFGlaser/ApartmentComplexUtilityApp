@@ -24,6 +24,7 @@ import { Link } from 'react-router-dom';
 import { navRoutes } from '../../routes/routes';
 import { auth } from '../../util/firebase';
 import { User } from 'firebase/auth';
+import { useUser } from '../../util/UserContext';
 
 const drawerWidth = 240;
 
@@ -33,18 +34,8 @@ interface NavigationProps {
 
 export default function Navigation(props: Readonly<NavigationProps>) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [loading, setLoading] = useState(true);
 
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const { user, userLoading } = useUser();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -53,7 +44,7 @@ export default function Navigation(props: Readonly<NavigationProps>) {
   const drawer = (
     <div>
       <Toolbar>
-        {loading ? (
+        {userLoading ? (
           <Box sx={{ mx: 'auto' }}>
             <CircularProgress />
           </Box>

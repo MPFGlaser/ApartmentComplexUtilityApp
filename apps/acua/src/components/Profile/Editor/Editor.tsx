@@ -14,18 +14,17 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { auth } from '../../../util/firebase';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, updateProfile } from 'firebase/auth';
+import { updateProfile } from 'firebase/auth';
+import { useUser } from '../../../util/UserContext';
+import { auth } from '../../../util/firebase';
 
 /* eslint-disable-next-line */
 export interface EditorProps {}
 
 export function Editor(props: EditorProps) {
-  const [loading, setLoading] = useState(true);
-
-  const [user, setUser] = useState<User | null>(null);
+  const { user, userLoading, setUser } = useUser();
 
   const [displayName, setDisplayName] = React.useState('');
   const [location, setLocation] = React.useState('');
@@ -34,16 +33,10 @@ export function Editor(props: EditorProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
-      if (user) {
-        setDisplayName(user.displayName || '');
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+    if (user) {
+      setDisplayName(user.displayName || '');
+    }
+  }, [user]);
 
   const handleClose = (confirm: boolean) => {
     if (confirm) {
@@ -57,13 +50,14 @@ export function Editor(props: EditorProps) {
       await updateProfile(user, { displayName }).then(() => {
         navigate('/');
       });
+      setUser({ ...user, displayName });
     }
   };
 
   return (
     <Container>
       <Paper>
-        {loading ? (
+        {userLoading ? (
           <Box
             sx={{
               my: 2,
