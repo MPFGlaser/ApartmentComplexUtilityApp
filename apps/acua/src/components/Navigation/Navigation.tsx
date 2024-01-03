@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppBar,
   Box,
+  Button,
+  CircularProgress,
   CssBaseline,
   Divider,
   Drawer,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -15,8 +18,12 @@ import {
   Typography,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import { navRoutes } from '../../routes/routes';
+import { auth } from '../../util/firebase';
+import { User } from 'firebase/auth';
 
 const drawerWidth = 240;
 
@@ -26,6 +33,18 @@ interface NavigationProps {
 
 export default function Navigation(props: Readonly<NavigationProps>) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -33,7 +52,45 @@ export default function Navigation(props: Readonly<NavigationProps>) {
 
   const drawer = (
     <div>
-      <Toolbar />
+      <Toolbar>
+        {loading ? (
+          <Box sx={{ mx: 'auto' }}>
+            <CircularProgress />
+          </Box>
+        ) : !user ? (
+          <Grid
+            container
+            justifyContent="space-between"
+            sx={{ display: 'flex' }}
+          >
+            <Button variant="contained" component={Link} to="/login">
+              Login
+            </Button>
+            <Button variant="outlined" component={Link} to="/signup">
+              Sign up
+            </Button>
+          </Grid>
+        ) : (
+          <Grid
+            container
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography variant="h6" component="h1">
+              {user.displayName}
+            </Typography>
+            <Box display="flex">
+              <IconButton component={Link} to="/edit-profile">
+                <ManageAccountsIcon />
+              </IconButton>
+              <IconButton onClick={(e) => handleSignout()}>
+                <LogoutIcon />
+              </IconButton>
+            </Box>
+          </Grid>
+        )}
+      </Toolbar>
       <Divider />
       <List>
         {navRoutes.map((item, index) => (
@@ -129,4 +186,8 @@ export default function Navigation(props: Readonly<NavigationProps>) {
       </Box>
     </Box>
   );
+}
+
+function handleSignout(): void {
+  auth.signOut();
 }
