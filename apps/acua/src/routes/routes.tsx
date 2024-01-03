@@ -92,4 +92,14 @@ export const breadcrumbNameMap = [
     breadcrumbName: 'Profile',
     hasDynamicPart: false,
   },
+  {
+    path: '/login',
+    breadcrumbName: 'Login',
+    hasDynamicPart: false,
+  },
+  {
+    path: '/signup',
+    breadcrumbName: 'Sign up',
+    hasDynamicPart: false,
+  },
 ];
