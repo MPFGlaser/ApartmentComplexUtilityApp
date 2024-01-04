@@ -5,6 +5,7 @@ import { User } from 'firebase/auth';
 import { useEffect, useMemo, useState } from 'react';
 import { auth } from '../util/firebase';
 import { UserContext } from '../util/UserContext';
+import axios from 'axios';
 
 export function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -18,6 +19,19 @@ export function App() {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
       setUserLoading(false);
+
+      // Add Firebase IdToken to all axios requests
+      axios.interceptors.request.use(
+        async (config) => {
+          if (!user) return config;
+
+          config.headers.token = await user.getIdToken();
+          return config;
+        },
+        (error) => {
+          return Promise.reject(error);
+        }
+      );
     });
 
     return () => unsubscribe();
