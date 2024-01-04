@@ -16,12 +16,12 @@ import {
 import React, { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../../util/firebase';
-import { FirebaseError } from '@firebase/util';
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   updateProfile,
 } from 'firebase/auth';
+import { convertErrorToMessage } from '../../util/ErrorHandler';
 
 /* eslint-disable-next-line */
 export interface LoginProps {}
@@ -81,29 +81,7 @@ export function Signup(props: LoginProps) {
 
       navigate('/login');
     } catch (error: unknown) {
-      if (!(error instanceof FirebaseError)) {
-        setSnackbarMessage('An unknown error occurred.');
-        return;
-      }
-
-      switch (error.code) {
-        case 'auth/email-already-in-use':
-          setSnackbarMessage('This email address is already in use.');
-          break;
-        case 'auth/invalid-email':
-          setSnackbarMessage('Invalid email address.');
-          break;
-        case 'auth/weak-password':
-          setSnackbarMessage('Password is too weak.');
-          break;
-        case 'auth/operation-not-allowed':
-          setSnackbarMessage('Operation not allowed.');
-          break;
-        default:
-          setSnackbarMessage('An unknown error occurred.');
-          break;
-      }
-
+      setSnackbarMessage(convertErrorToMessage(error));
       setSnackbarVisiblity(true);
     }
   }

@@ -14,7 +14,7 @@ import React, { MouseEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../../util/firebase';
 import { signInWithEmailAndPassword } from '@firebase/auth';
-import { FirebaseError } from '@firebase/util';
+import { convertErrorToMessage } from '../../util/ErrorHandler';
 
 /* eslint-disable-next-line */
 export interface LoginProps {}
@@ -53,29 +53,7 @@ export function Login(props: LoginProps) {
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/edit-profile');
     } catch (error: unknown) {
-      if (!(error instanceof FirebaseError)) {
-        setSnackbarMessage('An unknown error occurred.');
-        return;
-      }
-
-      switch (error.code) {
-        case 'auth/invalid-email':
-          setSnackbarMessage('Invalid email address.');
-          break;
-        case 'auth/user-disabled':
-          setSnackbarMessage('User is disabled.');
-          break;
-        case 'auth/user-not-found':
-          setSnackbarMessage('User not found.');
-          break;
-        case 'auth/wrong-password':
-          setSnackbarMessage('Wrong password.');
-          break;
-        default:
-          setSnackbarMessage('An unknown error occurred.');
-          break;
-      }
-
+      setSnackbarMessage(convertErrorToMessage(error));
       setSnackbarVisiblity(true);
     }
   }
