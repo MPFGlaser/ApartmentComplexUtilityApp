@@ -53,97 +53,105 @@ export function Editor(props: EditorProps) {
     }
   };
 
-  return (
-    <Container>
-      <Paper>
-        {userLoading ? (
+  const renderEditorContent = () => {
+    if (userLoading) {
+      return (
+        <Box
+          sx={{
+            my: 2,
+            p: 2,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '20vh', // take up the full viewport height
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      );
+    } else if (!user) {
+      return (
+        <Typography variant="h5" component="h1">
+          You must be logged in to view this page.
+        </Typography>
+      );
+    } else {
+      return (
+        <>
+          <Box sx={{ my: 2, p: 2, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="h5" component="h1">
+              Edit Profile
+            </Typography>
+            <TextField
+              label="Name"
+              variant="outlined"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              sx={{ my: 1 }}
+            />
+            <TextField
+              disabled
+              label="Location"
+              variant="outlined"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              sx={{ my: 1 }}
+            />
+          </Box>
+          <Divider variant="middle" />
           <Box
             sx={{
               my: 2,
               p: 2,
               display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '20vh', // take up the full viewport height
+              flexDirection: 'row',
+              alignContent: 'center',
             }}
           >
-            <CircularProgress />
+            <ButtonGroup variant="contained">
+              <Button color="primary" onClick={() => handleSave()}>
+                Save
+              </Button>
+              <Button color="error" onClick={() => setOpen(true)}>
+                Cancel
+              </Button>
+            </ButtonGroup>
           </Box>
-        ) : !user ? (
-          <Typography variant="h5" component="h1">
-            You must be logged in to view this page.
-          </Typography>
-        ) : (
-          <>
-            <Box sx={{ my: 2, p: 2, display: 'flex', flexDirection: 'column' }}>
-              <Typography variant="h5" component="h1">
-                Edit Profile
-              </Typography>
-              <TextField
-                label="Name"
-                variant="outlined"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                sx={{ my: 1 }}
-              />
-              <TextField
-                disabled
-                label="Location"
-                variant="outlined"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                sx={{ my: 1 }}
-              />
-            </Box>
-            <Divider variant="middle" />
-            <Box
-              sx={{
-                my: 2,
-                p: 2,
-                display: 'flex',
-                flexDirection: 'row',
-                alignContent: 'center',
-              }}
-            >
-              <ButtonGroup variant="contained">
-                <Button color="primary" onClick={() => handleSave()}>
-                  Save
-                </Button>
-                <Button color="error" onClick={() => setOpen(true)}>
-                  Cancel
-                </Button>
-              </ButtonGroup>
-            </Box>
-            <Dialog
-              open={open}
-              onClose={() => handleClose(false)}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                Are you sure you want to cancel and go back?
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  All changes will be lost.
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => handleClose(false)} color="primary">
-                  No
-                </Button>
-                <Button
-                  onClick={() => handleClose(true)}
-                  color="primary"
-                  autoFocus
-                >
-                  Yes
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </>
-        )}
-      </Paper>
+          <Dialog
+            open={open}
+            onClose={() => handleClose(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              Are you sure you want to cancel and go back?
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                All changes will be lost.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => handleClose(false)} color="primary">
+                No
+              </Button>
+              <Button
+                onClick={() => handleClose(true)}
+                color="primary"
+                autoFocus
+              >
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </>
+      );
+    }
+  };
+
+  return (
+    <Container>
+      <Paper>{renderEditorContent()}</Paper>
     </Container>
   );
 }

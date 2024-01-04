@@ -40,47 +40,54 @@ export default function Navigation(props: Readonly<NavigationProps>) {
     setMobileOpen(!mobileOpen);
   };
 
+  const renderToolbarContent = () => {
+    // If user is loading, show loading indicator
+    if (userLoading) {
+      return (
+        <Box sx={{ mx: 'auto' }}>
+          <CircularProgress />
+        </Box>
+      );
+      // If user is not logged in, show login and signup buttons
+    } else if (!user) {
+      return (
+        <Grid container justifyContent="space-between" sx={{ display: 'flex' }}>
+          <Button variant="contained" component={Link} to="/login">
+            Login
+          </Button>
+          <Button variant="outlined" component={Link} to="/signup">
+            Sign up
+          </Button>
+        </Grid>
+      );
+      // If user is logged in, show user's name and profile management buttons
+    } else {
+      return (
+        <Grid
+          container
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Typography variant="h6" component="h1">
+            {user.displayName}
+          </Typography>
+          <Box display="flex">
+            <IconButton component={Link} to="/edit-profile">
+              <ManageAccountsIcon />
+            </IconButton>
+            <IconButton onClick={(e) => handleSignout()}>
+              <LogoutIcon />
+            </IconButton>
+          </Box>
+        </Grid>
+      );
+    }
+  };
+
   const drawer = (
     <div>
-      <Toolbar>
-        {userLoading ? (
-          <Box sx={{ mx: 'auto' }}>
-            <CircularProgress />
-          </Box>
-        ) : !user ? (
-          <Grid
-            container
-            justifyContent="space-between"
-            sx={{ display: 'flex' }}
-          >
-            <Button variant="contained" component={Link} to="/login">
-              Login
-            </Button>
-            <Button variant="outlined" component={Link} to="/signup">
-              Sign up
-            </Button>
-          </Grid>
-        ) : (
-          <Grid
-            container
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Typography variant="h6" component="h1">
-              {user.displayName}
-            </Typography>
-            <Box display="flex">
-              <IconButton component={Link} to="/edit-profile">
-                <ManageAccountsIcon />
-              </IconButton>
-              <IconButton onClick={(e) => handleSignout()}>
-                <LogoutIcon />
-              </IconButton>
-            </Box>
-          </Grid>
-        )}
-      </Toolbar>
+      <Toolbar>{renderToolbarContent()}</Toolbar>
       <Divider />
       <List>
         {navRoutes.map((item, index) => (
