@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useUser } from './UserContext';
+import { Box, CircularProgress } from '@mui/material';
 
 export const ProtectedRoute = ({
   children,
@@ -9,20 +10,39 @@ export const ProtectedRoute = ({
   children: ReactNode;
   claims?: string[];
 }) => {
-  const { user } = useUser();
+  const { user, userLoading } = useUser();
+  const [hasClaim, setHasClaim] = useState(false);
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  useEffect(() => {
+    if (user && claims) {
+      user.getIdTokenResult().then((idTokenResult) => {
+        const userHasClaim = claims.some(
+          (claim) => idTokenResult.claims[claim]
+        );
+        setHasClaim(userHasClaim);
+      });
+    }
+  }, [user, claims]);
+
+  if (userLoading) {
+    return (
+      <Box
+        sx={{
+          my: 2,
+          p: 2,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '20vh', // take up the full viewport height
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
-  if (claims !== undefined && Array.isArray(claims)) {
-    user.getIdTokenResult().then((idTokenResult) => {
-      // check if user has a claim that is included in the claims array
-      const hasClaim = claims.some((claim) => idTokenResult.claims[claim]);
-      if (!hasClaim) {
-        return <Navigate to="/login" replace />;
-      }
-    });
+  if (!user || (claims && !hasClaim)) {
+    return <Navigate to="/login" replace />;
   }
 
   return children;
