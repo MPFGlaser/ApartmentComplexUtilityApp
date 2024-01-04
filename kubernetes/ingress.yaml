@@ -5,6 +5,7 @@ metadata:
   namespace: acua
   annotations:
     kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.global-static-ip-name: acua-static-ip
     networking.gke.io/managed-certificates: acua-certificate
 
 
