@@ -5,6 +5,8 @@ metadata:
   namespace: acua
   annotations:
     kubernetes.io/ingress.class: gce
+    networking.gke.io/managed-certificates: acua-certificate
+
 
 spec:
   rules:
@@ -42,4 +44,11 @@ spec:
                 name: acua
                 port:
                   number: 8080
-
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: acua-certificate
+spec:
+  domains:
+    - acua.mpfglaser.nl
