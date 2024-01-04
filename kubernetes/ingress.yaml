@@ -5,7 +5,7 @@ metadata:
   namespace: acua
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: gce
     nginx.ingress.kubernetes.io/use-regex: "true"
     networking.gke.io/load-balancer-type: "Internal"
 
