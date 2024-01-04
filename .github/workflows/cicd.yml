@@ -41,26 +41,40 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Build Docker images for affected projects'
         run: npx nx affected -t docker-build --parallel=3
-  # CD:
-  #   needs: CI
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@master
-  #     - name: Set up kubectl
-  #       uses: azure/k8s-set-context@v3
-  #       with:
-  #         method: kubeconfig
-  #         kubeconfig: ${{ secrets.KUBECONFIG }}
-  #     # - name: Set example secret
-  #     #   uses: azure/k8s-create-secret@v4
-  #     #   with:
-  #     #     namespace: acua
-  #     #     secret-name: demo-k8s-secret
-  #     #     data: lorem-ipsum
-  #     - name: Deploy to Kubernetes cluster
-  #       uses: Azure/k8s-deploy@v4.10.0
-  #       with:
-  #         action: deploy
-  #         namespace: acua
-  #         manifests: |
-  #           kubernetes
+  CD:
+    needs: CI
+    runs-on: ubuntu-latest
+    env:
+      GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+      GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
+      GKE_CLUSTER: acua # Add your cluster name here.
+      GKE_ZONE: europe-west4 # Add your cluster zone here.
+      DEPLOYMENT_NAME: acua # Add your deployment name here.
+      IMAGE: static-site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      # Setup gcloud CLI
+      -
+      - uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
+        with:
+          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          project_id: ${{ env.GCLOUD_PROJECT_ID }}
+
+      # Configure Docker to use the gcloud command-line tool as a credential
+      # helper for authentication
+      - run: |-
+          gcloud --quiet auth configure-docker
+
+      # Get the GKE credentials so we can deploy to the cluster
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@db150f2cc60d1716e61922b832eae71d2a45938f
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_SA_KEY }}
+
+      # Deploy the Docker image to the GKE cluster
+      - name: Deploy
+        run: |-
+          ./kubernetes/apply.sh
