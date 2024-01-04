@@ -2,9 +2,12 @@ import React from 'react';
 import {
   AppBar,
   Box,
+  Button,
+  CircularProgress,
   CssBaseline,
   Divider,
   Drawer,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -15,8 +18,12 @@ import {
   Typography,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import { navRoutes } from '../../routes/routes';
+import { auth } from '../../util/firebase';
+import { useUser } from '../../util/UserContext';
 
 const drawerWidth = 240;
 
@@ -27,13 +34,60 @@ interface NavigationProps {
 export default function Navigation(props: Readonly<NavigationProps>) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const { user, userLoading } = useUser();
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const renderToolbarContent = () => {
+    // If user is loading, show loading indicator
+    if (userLoading) {
+      return (
+        <Box sx={{ mx: 'auto' }}>
+          <CircularProgress />
+        </Box>
+      );
+      // If user is not logged in, show login and signup buttons
+    } else if (!user) {
+      return (
+        <Grid container justifyContent="space-between" sx={{ display: 'flex' }}>
+          <Button variant="contained" component={Link} to="/login">
+            Login
+          </Button>
+          <Button variant="outlined" component={Link} to="/signup">
+            Sign up
+          </Button>
+        </Grid>
+      );
+      // If user is logged in, show user's name and profile management buttons
+    } else {
+      return (
+        <Grid
+          container
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Typography variant="h6" component="h1">
+            {user.displayName}
+          </Typography>
+          <Box display="flex">
+            <IconButton component={Link} to="/edit-profile">
+              <ManageAccountsIcon />
+            </IconButton>
+            <IconButton onClick={(e) => handleSignout()}>
+              <LogoutIcon />
+            </IconButton>
+          </Box>
+        </Grid>
+      );
+    }
+  };
+
   const drawer = (
     <div>
-      <Toolbar />
+      <Toolbar>{renderToolbarContent()}</Toolbar>
       <Divider />
       <List>
         {navRoutes.map((item, index) => (
@@ -129,4 +183,8 @@ export default function Navigation(props: Readonly<NavigationProps>) {
       </Box>
     </Box>
   );
+}
+
+function handleSignout(): void {
+  auth.signOut();
 }

@@ -7,12 +7,19 @@ import Detail from '../components/Tickets/Detail/Detail';
 import { Editor as TicketEditor } from '../components/Tickets/Editor/Editor';
 import { Navigate } from 'react-router-dom';
 import { Editor as ProfileEditor } from '../components/Profile/Editor/Editor';
+import Login from './Login/Login';
+import Signup from './Signup/Signup';
+import { ProtectedRoute } from '../util/ProtectedRoute';
 
 export const navRoutes = [
   { path: '/', element: <Landing />, name: 'Home', icon: <HomeIcon /> },
   {
     path: '/tickets',
-    element: <TicketOverview />,
+    element: (
+      <ProtectedRoute>
+        <TicketOverview />
+      </ProtectedRoute>
+    ),
     name: 'Repair Requests',
     icon: <HandymanIcon />,
   },
@@ -21,12 +28,39 @@ export const navRoutes = [
 const utilityRoutes = [
   {
     path: '/tickets/view/:id',
-    element: <Detail />,
+    element: (
+      <ProtectedRoute>
+        <Detail />,
+      </ProtectedRoute>
+    ),
   },
-  { path: '/tickets/edit/:id', element: <TicketEditor /> },
-  { path: '/tickets/create', element: <TicketEditor /> },
-  { path: '/edit-profile', element: <ProfileEditor /> },
+  {
+    path: '/tickets/edit/:id',
+    element: (
+      <ProtectedRoute>
+        <TicketEditor />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/tickets/create',
+    element: (
+      <ProtectedRoute>
+        <TicketEditor />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/edit-profile',
+    element: (
+      <ProtectedRoute>
+        <ProfileEditor />
+      </ProtectedRoute>
+    ),
+  },
   { path: '/not-found', element: <Notfound /> },
+  { path: '/login', element: <Login /> },
+  { path: '/signup', element: <Signup /> },
   { path: '*', element: <Navigate to="/not-found" replace /> },
 ];
 
@@ -56,6 +90,16 @@ export const breadcrumbNameMap = [
   {
     path: '/edit-profile',
     breadcrumbName: 'Profile',
+    hasDynamicPart: false,
+  },
+  {
+    path: '/login',
+    breadcrumbName: 'Login',
+    hasDynamicPart: false,
+  },
+  {
+    path: '/signup',
+    breadcrumbName: 'Sign up',
     hasDynamicPart: false,
   },
 ];

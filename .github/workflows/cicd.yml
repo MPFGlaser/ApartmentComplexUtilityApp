@@ -9,6 +9,14 @@ jobs:
   CI:
     env:
       CONTAINER_REGISTRY: ${{ vars.CONTAINER_REGISTRY }}
+      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+      VITE_FIREBASE_PROJECT_ID: ${{ vars.VITE_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_STORAGE_BUCKET: ${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+      VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
+
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
@@ -33,26 +41,26 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Build Docker images for affected projects'
         run: npx nx affected -t docker-build --parallel=3
-  CD:
-    needs: CI
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Set up kubectl
-        uses: azure/k8s-set-context@v3
-        with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBECONFIG }}
-      # - name: Set example secret
-      #   uses: azure/k8s-create-secret@v4
-      #   with:
-      #     namespace: acua
-      #     secret-name: demo-k8s-secret
-      #     data: lorem-ipsum
-      - name: Deploy to Kubernetes cluster
-        uses: Azure/k8s-deploy@v4.10.0
-        with:
-          action: deploy
-          namespace: acua
-          manifests: |
-            kubernetes
+  # CD:
+  #   needs: CI
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@master
+  #     - name: Set up kubectl
+  #       uses: azure/k8s-set-context@v3
+  #       with:
+  #         method: kubeconfig
+  #         kubeconfig: ${{ secrets.KUBECONFIG }}
+  #     # - name: Set example secret
+  #     #   uses: azure/k8s-create-secret@v4
+  #     #   with:
+  #     #     namespace: acua
+  #     #     secret-name: demo-k8s-secret
+  #     #     data: lorem-ipsum
+  #     - name: Deploy to Kubernetes cluster
+  #       uses: Azure/k8s-deploy@v4.10.0
+  #       with:
+  #         action: deploy
+  #         namespace: acua
+  #         manifests: |
+  #           kubernetes
