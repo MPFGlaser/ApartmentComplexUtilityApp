@@ -9,10 +9,6 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
 
 spec:
-  tls:
-    - hosts:
-      - acua.mpfglaser.nl
-      - acua.test
   rules:
     - host: acua.test
       http:
