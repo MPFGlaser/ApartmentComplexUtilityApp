@@ -80,4 +80,5 @@ jobs:
       # Deploy the Docker image to the GKE cluster
       - name: Deploy
         run: |-
+          chmod +x ./kubernetes/apply.sh
           ./kubernetes/apply.sh
