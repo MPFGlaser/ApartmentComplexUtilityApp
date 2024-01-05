@@ -11,6 +11,7 @@ export const ProtectedRoute = ({
 }) => {
   const { currentUser } = useAuth();
   const [hasClaim, setHasClaim] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (currentUser && claims) {
@@ -19,9 +20,16 @@ export const ProtectedRoute = ({
           (claim) => idTokenResult.claims[claim]
         );
         setHasClaim(userHasClaim);
+        setIsLoading(false);
       });
+    } else {
+      setIsLoading(false);
     }
   }, [currentUser, claims]);
+
+  if (isLoading) {
+    return null; // Or your loading component
+  }
 
   if (!currentUser || (claims && !hasClaim)) {
     return <Navigate to="/login" replace />;
