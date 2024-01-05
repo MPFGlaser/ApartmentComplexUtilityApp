@@ -27,7 +27,7 @@ spec:
               service:
                 name: acua
                 port:
-                  number: 8080
+                  number: 80
 ---
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
