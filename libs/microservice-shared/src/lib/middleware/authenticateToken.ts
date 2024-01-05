@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { auth } from '../config/firebase-admin';
-import { stdout } from 'process';
 
 export function authenticated(claims?: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -29,7 +28,7 @@ export function authenticated(claims?: string[]) {
         return next(); // pass the execution off to whatever request the client intended
       })
       .catch((error) => {
-        stdout.write('\nError verifying ID token:', error);
+        process.stdout.write('\nError verifying ID token:', error);
         return res.sendStatus(403); // if the token is invalid
       });
 
