@@ -1,0 +1,67 @@
+{
+  "name": "location-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/location-service/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/location-service",
+        "main": "apps/location-service/src/main.ts",
+        "tsConfig": "apps/location-service/tsconfig.app.json",
+        "isolatedConfig": true,
+        "webpackConfig": "apps/location-service/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "./scripts/docker-build.sh $CONTAINER_REGISTRY auth-service $DOCKER_TAG_EXTRA"
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "location-service:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "location-service:build:development"
+        },
+        "production": {
+          "buildTarget": "location-service:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/location-service/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/location-service/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: location-service
+    version: "1.0"
+  name: location-service
+  namespace: acua
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: location-service
+      version: "1.0"
+  template:
+    metadata:
+      labels:
+        app: location-service
+        version: "1.0"
+    spec:
+      containers:
+      - name: location-service
+        image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/location-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: location-service
+  name: location-service
+  namespace: acua
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: 3000
+  selector:
+    app: location-service
