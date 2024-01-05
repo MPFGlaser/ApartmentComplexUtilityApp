@@ -3,7 +3,6 @@ import {
   AppBar,
   Box,
   Button,
-  CircularProgress,
   CssBaseline,
   Divider,
   Drawer,
@@ -22,8 +21,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import { navRoutes } from '../../routes/routes';
-import { auth } from '../../util/firebase';
-import { useUser } from '../../util/UserContext';
+import { useAuth } from '../../util/AuthProvider';
 
 const drawerWidth = 240;
 
@@ -34,22 +32,19 @@ interface NavigationProps {
 export default function Navigation(props: Readonly<NavigationProps>) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const { user, userLoading } = useUser();
+  const { currentUser, signOut } = useAuth();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  function handleSignout(): void {
+    signOut();
+  }
+
   const renderToolbarContent = () => {
     // If user is loading, show loading indicator
-    if (userLoading) {
-      return (
-        <Box sx={{ mx: 'auto' }}>
-          <CircularProgress />
-        </Box>
-      );
-      // If user is not logged in, show login and signup buttons
-    } else if (!user) {
+    if (!currentUser) {
       return (
         <Grid container justifyContent="space-between" sx={{ display: 'flex' }}>
           <Button variant="contained" component={Link} to="/login">
@@ -70,7 +65,7 @@ export default function Navigation(props: Readonly<NavigationProps>) {
           justifyContent="space-between"
         >
           <Typography variant="h6" component="h1">
-            {user.displayName}
+            {currentUser.displayName}
           </Typography>
           <Box display="flex">
             <IconButton component={Link} to="/edit-profile">
@@ -183,8 +178,4 @@ export default function Navigation(props: Readonly<NavigationProps>) {
       </Box>
     </Box>
   );
-}
-
-function handleSignout(): void {
-  auth.signOut();
 }

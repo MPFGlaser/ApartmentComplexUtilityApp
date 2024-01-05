@@ -1,50 +1,29 @@
 import { Outlet } from 'react-router-dom';
 import Navigation from '../components/Navigation/Navigation';
 import RouterBreadcrumbs from '../components/RouterBreadcrumbs/RouterBreadcrumbs';
-import { User } from 'firebase/auth';
-import { useEffect, useMemo, useState } from 'react';
-import { auth } from '../util/firebase';
-import { UserContext } from '../util/UserContext';
 import axios from 'axios';
+import { useAuth } from '../util/AuthProvider';
 
 export function App() {
-  const [user, setUser] = useState<User | null>(null);
-  const [userLoading, setUserLoading] = useState(true);
-  const userContextValue = useMemo(
-    () => ({ user, userLoading, setUser }),
-    [user, userLoading]
+  const { getIdToken } = useAuth();
+
+  // Add Firebase IdToken to all axios requests
+  axios.interceptors.request.use(
+    async (config) => {
+      config.headers.token = await getIdToken();
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
   );
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
-      setUserLoading(false);
-
-      // Add Firebase IdToken to all axios requests
-      axios.interceptors.request.use(
-        async (config) => {
-          if (!user) return config;
-
-          config.headers.token = await user.getIdToken();
-          return config;
-        },
-        (error) => {
-          return Promise.reject(error);
-        }
-      );
-    });
-
-    return () => unsubscribe();
-  });
 
   return (
     <div>
-      <UserContext.Provider value={userContextValue}>
-        <Navigation>
-          <RouterBreadcrumbs />
-          <Outlet />
-        </Navigation>
-      </UserContext.Provider>
+      <Navigation>
+        <RouterBreadcrumbs />
+        <Outlet />
+      </Navigation>
     </div>
   );
 }

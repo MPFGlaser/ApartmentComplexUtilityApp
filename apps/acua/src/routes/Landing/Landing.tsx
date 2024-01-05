@@ -13,20 +13,20 @@ import { Link } from 'react-router-dom';
 
 import RepairImage from '../../assets/repair.jpg';
 import CoupleImage from '../../assets/couple.jpg';
-import { useUser } from '../../util/UserContext';
+import { useAuth } from '../../util/AuthProvider';
 
 /* eslint-disable-next-line */
 export interface LandingProps {}
 
 export function Landing(props: LandingProps) {
-  const { user } = useUser();
+  const { currentUser } = useAuth();
 
   return (
     <Container sx={{ my: 1 }}>
       <Box>
         <Typography variant="h4" component="h1">
           Welcome to the Apartment Complex Utility App
-          {user?.displayName ? ', ' + user.displayName : null}!
+          {currentUser?.displayName ? ', ' + currentUser.displayName : null}!
         </Typography>
         <Typography variant="body1" component="p">
           Here you can file repair requests and manage your account information.

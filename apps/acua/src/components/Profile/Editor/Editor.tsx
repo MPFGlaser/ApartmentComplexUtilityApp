@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   ButtonGroup,
-  CircularProgress,
   Container,
   Dialog,
   DialogActions,
@@ -17,13 +16,13 @@ import {
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updateProfile } from 'firebase/auth';
-import { useUser } from '../../../util/UserContext';
+import { useAuth } from '../../../util/AuthProvider';
 
 /* eslint-disable-next-line */
 export interface EditorProps {}
 
 export function Editor(props: EditorProps) {
-  const { user, userLoading, setUser } = useUser();
+  const { currentUser, getUser } = useAuth();
 
   const [displayName, setDisplayName] = React.useState('');
   const [location, setLocation] = React.useState('');
@@ -32,10 +31,10 @@ export function Editor(props: EditorProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      setDisplayName(user.displayName || '');
+    if (currentUser) {
+      setDisplayName(currentUser.displayName ?? '');
     }
-  }, [user]);
+  }, [currentUser]);
 
   const handleClose = (confirm: boolean) => {
     if (confirm) {
@@ -45,31 +44,16 @@ export function Editor(props: EditorProps) {
   };
 
   const handleSave = async () => {
-    if (user) {
-      await updateProfile(user, { displayName }).then(() => {
+    if (currentUser) {
+      await updateProfile(currentUser, { displayName }).then(() => {
         navigate('/');
       });
-      setUser({ ...user, displayName });
+      getUser();
     }
   };
 
   const renderEditorContent = () => {
-    if (userLoading) {
-      return (
-        <Box
-          sx={{
-            my: 2,
-            p: 2,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '20vh', // take up the full viewport height
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      );
-    } else if (!user) {
+    if (!currentUser) {
       return (
         <Typography variant="h5" component="h1">
           You must be logged in to view this page.
