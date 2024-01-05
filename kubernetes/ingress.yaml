@@ -24,10 +24,8 @@ spec:
           - path: /
             pathType: Prefix
             backend:
-              service:
-                name: acua
-                port:
-                  number: 80
+              serviceName: acua
+              servicePort: 80
 ---
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
