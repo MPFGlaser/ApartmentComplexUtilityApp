@@ -1,7 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { ReactNode, useEffect, useState } from 'react';
-import { useUser } from './UserContext';
-import { Box, CircularProgress } from '@mui/material';
+import { useAuth } from './AuthProvider';
 
 export const ProtectedRoute = ({
   children,
@@ -10,38 +9,29 @@ export const ProtectedRoute = ({
   children: ReactNode;
   claims?: string[];
 }) => {
-  const { user, userLoading } = useUser();
+  const { currentUser } = useAuth();
   const [hasClaim, setHasClaim] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (user && claims) {
-      user.getIdTokenResult().then((idTokenResult) => {
+    if (currentUser && claims) {
+      currentUser.getIdTokenResult().then((idTokenResult) => {
         const userHasClaim = claims.some(
           (claim) => idTokenResult.claims[claim]
         );
         setHasClaim(userHasClaim);
+        setIsLoading(false);
       });
+    } else {
+      setIsLoading(false);
     }
-  }, [user, claims]);
+  }, [currentUser, claims]);
 
-  if (userLoading) {
-    return (
-      <Box
-        sx={{
-          my: 2,
-          p: 2,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '20vh', // take up the full viewport height
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
+  if (isLoading) {
+    return null; // Or your loading component
   }
 
-  if (!user || (claims && !hasClaim)) {
+  if (!currentUser || (claims && !hasClaim)) {
     return <Navigate to="/login" replace />;
   }
 

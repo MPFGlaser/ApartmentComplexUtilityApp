@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom/client';
 import App from './app/app';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { routes } from './routes/routes';
+import { AuthProvider } from './util/AuthProvider';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );
