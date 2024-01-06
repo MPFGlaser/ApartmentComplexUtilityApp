@@ -42,10 +42,14 @@ metadata:
     app: location-service
   name: location-service
   namespace: acua
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
-    - port: 3000
+    - name: http
+      protocol: TCP
+      port: 3000
       targetPort: 3000
   selector:
     app: location-service
