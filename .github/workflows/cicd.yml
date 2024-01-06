@@ -77,6 +77,16 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
 
+      # Set kubernetes secrets
+      - name: Set secrets
+        run: |-
+          kubectl create secret generic acua-backend-secrets \
+            --from-literal=firebase-config=${{ secrets.FIREBASE_CONFIG }}
+          kubectl create secret generic location-db-credentials \
+            --from-literal=database="locationdb" \
+            --from-literal=username="locationdb" \
+            --from-literal=password=${{ secrets.LOCATION_DB_PASSWORD }}
+
       # Deploy the Docker image to the GKE cluster
       - name: Deploy
         run: |-
