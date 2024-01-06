@@ -4,11 +4,9 @@ metadata:
   name: acua-ingress
   namespace: acua
   annotations:
-    kubernetes.io/ingress.class: gce
+    ingressClassName: "gce"
     kubernetes.io/ingress.global-static-ip-name: acua-static-ip
     networking.gke.io/managed-certificates: acua-certificate
-
-
 spec:
   rules:
     - host: acua.mpfglaser.nl
