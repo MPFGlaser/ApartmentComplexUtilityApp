@@ -28,7 +28,8 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "acua:build"
+        "buildTarget": "acua:build",
+        "proxyConfig": "apps/acua/proxy.conf.json"
       },
       "configurations": {
         "development": {
