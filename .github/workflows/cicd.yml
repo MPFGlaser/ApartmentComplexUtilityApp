@@ -77,14 +77,12 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
 
-      # Set kubernetes secrets
+      # Set kubernetes secrets by deleting existing ones and creating them again, which allows for updating values.
       - name: Set secrets
         run: |-
-          # Delete the secret if it already exists
           kubectl delete secret acua-backend-secrets -n acua || true
           kubectl delete secret location-db-credentials -n acua || true
 
-          # Create the secret
           kubectl create secret generic acua-backend-secrets -n acua \
             --from-literal=firebase-config=${{ secrets.FIREBASE_CONFIG }}
           kubectl create secret generic location-db-credentials -n acua \
