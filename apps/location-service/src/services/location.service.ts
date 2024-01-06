@@ -11,7 +11,7 @@ class LocationService {
   }
 
   public async getLocationByOwner(ownerId: string) {
-    return Location.findAll({ where: { owner: ownerId } });
+    return Location.findOne({ where: { owner: ownerId } });
   }
 
   public async createLocation(location: ILocation) {
