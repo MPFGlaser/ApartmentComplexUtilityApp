@@ -7,7 +7,7 @@ metadata:
     ingressClassName: "gce"
     kubernetes.io/ingress.global-static-ip-name: acua-static-ip
     networking.gke.io/managed-certificates: acua-certificate
-    networking.gke.io/frontend-config: frontend-config
+    networking.gke.io/v1beta1.FrontendConfig: frontend-config
     kubernetes.io/ingress.allow-http: "true"
 spec:
   rules:
