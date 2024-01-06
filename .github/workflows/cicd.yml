@@ -80,9 +80,14 @@ jobs:
       # Set kubernetes secrets
       - name: Set secrets
         run: |-
-          kubectl create secret generic acua-backend-secrets \
+          # Delete the secret if it already exists
+          kubectl delete secret acua-backend-secrets -n acua || true
+          kubectl delete secret location-db-credentials -n acua || true
+
+          # Create the secret
+          kubectl create secret generic acua-backend-secrets -n acua \
             --from-literal=firebase-config=${{ secrets.FIREBASE_CONFIG }}
-          kubectl create secret generic location-db-credentials \
+          kubectl create secret generic location-db-credentials -n acua \
             --from-literal=database="locationdb" \
             --from-literal=username="locationdb" \
             --from-literal=password=${{ secrets.LOCATION_DB_PASSWORD }}
