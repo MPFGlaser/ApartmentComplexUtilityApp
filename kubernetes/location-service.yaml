@@ -21,7 +21,7 @@ spec:
       serviceAccountName: acua-ksa
       containers:
       - name: location-service
-        image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/location-service:latest
+        image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/location-service:0.1.1
         imagePullPolicy: Always
         env:
           - name: FIREBASE_CONFIG
