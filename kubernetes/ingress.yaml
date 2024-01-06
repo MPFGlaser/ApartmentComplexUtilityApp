@@ -4,11 +4,11 @@ metadata:
   name: acua-ingress
   namespace: acua
   annotations:
-    kubernetes.io/ingress.class: gce
+    ingressClassName: "gce"
     kubernetes.io/ingress.global-static-ip-name: acua-static-ip
     networking.gke.io/managed-certificates: acua-certificate
-
-
+    networking.gke.io/v1beta1.FrontendConfig: frontend-config
+    kubernetes.io/ingress.allow-http: "true"
 spec:
   rules:
     - host: acua.mpfglaser.nl
@@ -33,6 +33,17 @@ apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
   name: acua-certificate
+  namespace: acua
 spec:
   domains:
     - acua.mpfglaser.nl
+---
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: frontend-config
+  namespace: acua
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: FOUND
