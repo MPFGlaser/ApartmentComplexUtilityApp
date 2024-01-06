@@ -23,11 +23,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use('/health', healthRoute);
+app.use('/', healthRoute);
 
 app.use(authenticated());
 
 // Routes
-app.use('/', locationRoute);
+app.use('/api/location', locationRoute);
 
 export default app;
