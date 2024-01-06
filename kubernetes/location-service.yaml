@@ -22,7 +22,7 @@ spec:
       containers:
       - name: location-service
         image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/location-service:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
           - name: FIREBASE_CONFIG
             valueFrom:
