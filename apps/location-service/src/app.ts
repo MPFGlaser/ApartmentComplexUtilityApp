@@ -13,7 +13,15 @@ app.disable('x-powered-by');
 
 app.use(bodyParser.json());
 
-app.use(cors());
+const corsOptions = {
+  origin:
+    process.env.NODE_ENV === 'production'
+      ? 'https://acua.mpfglaser.nl'
+      : 'http://localhost:4200',
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 
 app.use('/health', healthRoute);
 
