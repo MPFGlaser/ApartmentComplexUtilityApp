@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Box,
-  Button,
   Container,
   Divider,
   FormControl,
@@ -55,7 +54,7 @@ export function Detail(props: DetailProps) {
 
   useEffect(() => {
     const fetchLocation = async () => {
-      if (ticket && ticket.location) {
+      if (ticket?.location) {
         const data = await locationService.getLocationById(ticket.location);
         setLocation(data);
       }
@@ -96,8 +95,7 @@ export function Detail(props: DetailProps) {
           <Box sx={{ my: 2 }}>
             <Typography variant="h6">Repair Request Details</Typography>
             <Typography variant="body1">
-              Status:{' '}
-              {ticket && ticket.status ? statusTexts[ticket.status] : ''}
+              Status: {ticket?.status ? statusTexts[ticket.status] : ''}
             </Typography>
             <Typography variant="body1">
               Created on:{' '}

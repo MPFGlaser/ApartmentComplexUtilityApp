@@ -5,10 +5,10 @@ import {
   getTicketSchema,
   updateTicketSchema,
   updateTicketStatusSchema,
+  deleteTicketSchema,
 } from '../validators/ticket.validator';
 import TicketService from '../services/ticket.service';
 import { ITicket } from '../interfaces/ticket.interface';
-import { deleteTicketSchema } from '../validators/ticket.validator';
 
 const router = Router();
 

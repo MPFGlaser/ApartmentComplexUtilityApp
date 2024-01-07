@@ -32,7 +32,6 @@ export function convertErrorToMessage(error: unknown) {
         errorMessage = 'Email or password is incorrect.';
         break;
       default:
-        errorMessage = 'An unknown error occurred.';
         break;
     }
   }

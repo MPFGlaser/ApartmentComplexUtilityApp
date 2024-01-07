@@ -50,7 +50,7 @@ const columns = [
   },
 ];
 
-function Table({ tickets }: { tickets: ITicket[] }) {
+function Table({ tickets }: ReadOnly<{ tickets: ITicket[] }>) {
   const navigate = useNavigate();
 
   const handleRowClick = (param: { id: number | string }) => {
