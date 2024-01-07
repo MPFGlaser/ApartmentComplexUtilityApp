@@ -53,9 +53,13 @@ export function Login(props: LoginProps) {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      await refreshIdToken();
+      const token = await refreshIdToken();
 
-      navigate('/edit-profile');
+      if (token) {
+        navigate('/edit-profile');
+      } else {
+        throw new Error('Failed to login. Please try again.');
+      }
     } catch (error: unknown) {
       setSnackbarMessage(convertErrorToMessage(error));
       setSnackbarVisiblity(true);
