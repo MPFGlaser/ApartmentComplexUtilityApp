@@ -66,7 +66,7 @@ spec:
 
           # Replace DB_PORT with the port the proxy should listen on
           - "--port=5432"
-          - "mpfg-acua:europe-west4:location"
+          - "mpfg-acua:europe-west4:ticket"
 
         securityContext:
           # The default Cloud SQL Auth Proxy image runs as the
