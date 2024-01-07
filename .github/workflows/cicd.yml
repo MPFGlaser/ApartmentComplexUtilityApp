@@ -82,6 +82,7 @@ jobs:
       - name: Set secrets
         run: |-
           kubectl delete secret location-db-credentials -n acua || true
+          kubectl delete secret ticket-db-credentials -n acua || true
 
           kubectl create secret generic location-db-credentials -n acua \
             --from-literal=database="locationdb" \
