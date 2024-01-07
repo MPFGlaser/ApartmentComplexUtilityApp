@@ -18,13 +18,24 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-  auth-service:
-    image: auth-service
+  locationdb:
+    image: postgres:latest
     restart: always
-    env_file:
-      - ./apps/auth-service/.env
+    environment:
+      POSTGRES_USER: locationdb
+      POSTGRES_PASSWORD: locationdb
+      POSTGRES_DB: locationdb
     ports:
-      - 3000:3000
+      - 5433:5432
+    volumes:
+      - locationdb-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 volumes:
   authdb-data:
+  locationdb-data:

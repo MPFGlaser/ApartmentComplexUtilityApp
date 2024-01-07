@@ -1,3 +1,6 @@
+# Backend ('/api' for development)
+VITE_API_URL = https://acua.mpfglaser.nl/api
+
 # Firebase
 VITE_FIREBASE_API_KEY =
 VITE_FIREBASE_AUTH_DOMAIN =

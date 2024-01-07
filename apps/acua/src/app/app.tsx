@@ -11,6 +11,7 @@ export function App() {
   axios.interceptors.request.use(
     async (config) => {
       config.headers.token = await getIdToken();
+      config.headers.withCredentials = false;
       return config;
     },
     (error) => {

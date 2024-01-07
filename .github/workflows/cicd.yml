@@ -9,6 +9,7 @@ jobs:
   CI:
     env:
       CONTAINER_REGISTRY: ${{ vars.CONTAINER_REGISTRY }}
+      VITE_API_URL: 'https://acua.mpfglaser.nl/api'
       VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
       VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
       VITE_FIREBASE_PROJECT_ID: ${{ vars.VITE_FIREBASE_PROJECT_ID }}
@@ -76,6 +77,16 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
+
+      # Set kubernetes secrets by deleting existing ones and creating them again, which allows for updating values.
+      - name: Set secrets
+        run: |-
+          kubectl delete secret location-db-credentials -n acua || true
+
+          kubectl create secret generic location-db-credentials -n acua \
+            --from-literal=database="locationdb" \
+            --from-literal=username="locationdb" \
+            --from-literal=password="${{ secrets.LOCATION_DB_PASSWORD }}"
 
       # Deploy the Docker image to the GKE cluster
       - name: Deploy

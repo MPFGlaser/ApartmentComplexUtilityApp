@@ -17,6 +17,8 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updateProfile } from 'firebase/auth';
 import { useAuth } from '../../../util/AuthProvider';
+import { ILocation } from '../../../interfaces/location.interface';
+import locationService from '../../../services/location.service';
 
 /* eslint-disable-next-line */
 export interface EditorProps {}
@@ -25,7 +27,8 @@ export function Editor(props: EditorProps) {
   const { currentUser, getUser } = useAuth();
 
   const [displayName, setDisplayName] = React.useState('');
-  const [location, setLocation] = React.useState('');
+  const [location, setLocation] = React.useState<ILocation | null>(null); // [location, setLocation
+  const [locationName, setLocationName] = React.useState('');
   const [open, setOpen] = React.useState(false);
 
   const navigate = useNavigate();
@@ -33,6 +36,11 @@ export function Editor(props: EditorProps) {
   useEffect(() => {
     if (currentUser) {
       setDisplayName(currentUser.displayName ?? '');
+
+      locationService.getOwnLocation().then((locationData) => {
+        setLocation(locationData);
+        setLocationName(locationData.name ?? '');
+      });
     }
   }, [currentUser]);
 
@@ -45,10 +53,28 @@ export function Editor(props: EditorProps) {
 
   const handleSave = async () => {
     if (currentUser) {
-      await updateProfile(currentUser, { displayName }).then(() => {
-        navigate('/');
-      });
-      getUser();
+      try {
+        // Update location data
+        if (location) {
+          // Update existing location
+          await locationService.updateLocation({
+            ...location,
+            name: locationName,
+          });
+        } else {
+          // Create new location if it doesn't exist
+          await locationService.createLocation({ name: locationName });
+        }
+
+        // Update user data
+        await updateProfile(currentUser, { displayName }).then(() => {
+          navigate('/');
+        });
+        getUser();
+      } catch (error) {
+        console.error(error);
+        // Handle the error appropriately here
+      }
     }
   };
 
@@ -74,11 +100,10 @@ export function Editor(props: EditorProps) {
               sx={{ my: 1 }}
             />
             <TextField
-              disabled
               label="Location"
               variant="outlined"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              value={locationName}
+              onChange={(e) => setLocationName(e.target.value)}
               sx={{ my: 1 }}
             />
           </Box>
