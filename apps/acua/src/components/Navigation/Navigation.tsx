@@ -92,6 +92,7 @@ export default function Navigation(props: Readonly<NavigationProps>) {
             component={Link}
             to={item.path}
             style={{ textDecoration: 'none', color: 'inherit' }}
+            onClick={handleDrawerToggle}
           >
             <ListItemButton>
               <ListItemIcon>{item.icon}</ListItemIcon>
