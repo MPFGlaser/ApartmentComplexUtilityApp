@@ -75,7 +75,7 @@ router.post('/', ...validate(createTicketSchema), async (req, res) => {
     const TicketToCreate: ITicket = {
       creator: req.body.uid,
       location: req.body.location,
-      title: req.body.name,
+      title: req.body.title,
       description: req.body.description,
     };
 
