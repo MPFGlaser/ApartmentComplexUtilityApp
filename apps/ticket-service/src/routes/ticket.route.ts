@@ -40,7 +40,7 @@ router.get('/:id', ...validate(getTicketSchema), async (req, res) => {
 
 router.get('/by-creator/me', async (req, res) => {
   try {
-    const result = await TicketService.getTicketByCreator(req.body.uid);
+    const result = await TicketService.getTicketsByCreator(req.body.uid);
 
     if (!result) return res.status(404).send({ message: 'Ticket not found' });
 
@@ -56,7 +56,7 @@ router.get(
   authenticated(['admin']),
   async (req, res) => {
     try {
-      const result = await TicketService.getTicketByCreator(
+      const result = await TicketService.getTicketsByCreator(
         req.params.creatorId
       );
 

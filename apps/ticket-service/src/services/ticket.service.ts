@@ -11,8 +11,8 @@ class TicketService {
     return Ticket.findByPk(id);
   }
 
-  public async getTicketByCreator(creatorId: string) {
-    return Ticket.findOne({ where: { creator: creatorId } });
+  public async getTicketsByCreator(creatorId: string) {
+    return Ticket.findAll({ where: { creator: creatorId } });
   }
 
   public async createTicket(ticket: ITicket) {
