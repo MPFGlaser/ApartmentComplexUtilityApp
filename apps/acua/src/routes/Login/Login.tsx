@@ -15,6 +15,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../../util/firebase';
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { convertErrorToMessage } from '../../util/ErrorHandler';
+import { useAuth } from '../../util/AuthProvider';
 
 /* eslint-disable-next-line */
 export interface LoginProps {}
@@ -30,6 +31,7 @@ export function Login(props: LoginProps) {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { refreshIdToken } = useAuth();
 
   const [snackbarVisiblity, setSnackbarVisiblity] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -51,6 +53,8 @@ export function Login(props: LoginProps) {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      await refreshIdToken();
+
       navigate('/edit-profile');
     } catch (error: unknown) {
       setSnackbarMessage(convertErrorToMessage(error));
