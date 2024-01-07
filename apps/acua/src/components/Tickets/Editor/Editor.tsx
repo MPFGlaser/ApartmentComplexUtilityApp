@@ -10,26 +10,37 @@ import {
   DialogTitle,
   Divider,
   Paper,
+  Skeleton,
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import ticketService from '../../../services/ticket.service';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import locationService from '../../../services/location.service';
+import { ILocation } from '../../../interfaces/location.interface';
 
 /* eslint-disable-next-line */
 export interface EditorProps {}
 
 export function Editor(props: EditorProps) {
-  const [title, setTitle] = React.useState('Broken sink');
-  const [description, setDescription] = React.useState(
-    "My sink is broken and the water won't drain out properly. Please come and fix it. Thank you!"
-  );
-  const [location, setLocation] = React.useState('Kitchen');
+  const [title, setTitle] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [location, setLocation] = React.useState<ILocation | null>(null);
 
   const [open, setOpen] = React.useState(false);
   const [action, setAction] = React.useState('');
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchLocation = async () => {
+      const data = await locationService.getOwnLocation();
+      setLocation(data);
+    };
+
+    fetchLocation();
+  }, []);
 
   const handleOpen = (action: string) => {
     setAction(action);
@@ -49,7 +60,18 @@ export function Editor(props: EditorProps) {
   const handleClear = () => {
     setTitle('');
     setDescription('');
-    setLocation('');
+  };
+
+  const handleSave = () => {
+    if (!title || !description || !location?.id) {
+      return;
+    }
+    ticketService.createTicket({
+      title,
+      description,
+      location: location?.id,
+    });
+    navigate(-1);
   };
 
   return (
@@ -72,13 +94,16 @@ export function Editor(props: EditorProps) {
               onChange={(e) => setTitle(e.target.value)}
               sx={{ my: 1 }}
             />
-            <TextField
-              label="Location"
-              variant="outlined"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              sx={{ my: 1 }}
-            />
+            <Typography variant="body1">
+              Location:{' '}
+              {location ? (
+                location.name
+              ) : (
+                <Box component="span" display="inline-block">
+                  <Skeleton width={100} />
+                </Box>
+              )}
+            </Typography>
           </Box>
           <Divider variant="middle" />
           <Box sx={{ my: 2, display: 'flex', flexDirection: 'column' }}>
@@ -103,7 +128,9 @@ export function Editor(props: EditorProps) {
             }}
           >
             <ButtonGroup variant="contained">
-              <Button color="primary">Save</Button>
+              <Button color="primary" onClick={() => handleSave()}>
+                Save
+              </Button>
               <Button onClick={() => handleOpen('clear')} color="error">
                 Clear
               </Button>
