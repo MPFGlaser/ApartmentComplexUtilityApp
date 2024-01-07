@@ -31,17 +31,17 @@ spec:
           - name: DATABASE_USER
             valueFrom:
               secretKeyRef:
-                name: location-db-credentials
+                name: ticket-db-credentials
                 key: username
           - name: DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: location-db-credentials
+                name: ticket-db-credentials
                 key: password
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:
-                name: location-db-credentials
+                name: ticket-db-credentials
                 key: database
         ports:
         - containerPort: 3000
