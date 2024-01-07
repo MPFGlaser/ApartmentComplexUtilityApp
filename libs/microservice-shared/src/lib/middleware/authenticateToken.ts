@@ -14,11 +14,12 @@ export function authenticated(claims?: string[]) {
       .then((decodedToken) => {
         // Verify claims, if required
         if (claims) {
-          const hasRequiredClaim = claims.some(
-            (claim) => decodedToken[claim] === true
+          const tokenClaims = decodedToken['claims'] || [];
+          const hasRequiredClaims = claims.some((claim) =>
+            tokenClaims.includes(claim)
           );
-          if (!hasRequiredClaim) {
-            return res.sendStatus(403); // if the token does not have the required claim
+          if (!hasRequiredClaims) {
+            return res.sendStatus(403); // if the token does not have the required claims
           }
         }
 

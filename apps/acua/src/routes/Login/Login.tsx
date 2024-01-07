@@ -12,9 +12,9 @@ import {
 } from '@mui/material';
 import React, { MouseEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../../util/firebase';
-import { signInWithEmailAndPassword } from '@firebase/auth';
 import { convertErrorToMessage } from '../../util/ErrorHandler';
+import { useAuth } from '../../util/AuthProvider';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 /* eslint-disable-next-line */
 export interface LoginProps {}
@@ -30,6 +30,8 @@ export function Login(props: LoginProps) {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
 
   const [snackbarVisiblity, setSnackbarVisiblity] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -50,7 +52,8 @@ export function Login(props: LoginProps) {
     e.preventDefault();
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      setLoading(true);
+      await login(email, password);
       navigate('/edit-profile');
     } catch (error: unknown) {
       setSnackbarMessage(convertErrorToMessage(error));
@@ -115,13 +118,23 @@ export function Login(props: LoginProps) {
               justifyContent: 'center',
             }}
           >
-            <Button
-              id="signin-button"
-              variant="contained"
-              onClick={(e) => handleLogin(e)}
-            >
-              Sign in
-            </Button>
+            {!loading ? (
+              <Button
+                id="signin-button"
+                variant="contained"
+                onClick={(e) => handleLogin(e)}
+              >
+                Sign in
+              </Button>
+            ) : (
+              <LoadingButton
+                id="signin-button"
+                variant="contained"
+                loading={loading}
+              >
+                Sign in
+              </LoadingButton>
+            )}
             <Button
               id="signup-button"
               variant="outlined"

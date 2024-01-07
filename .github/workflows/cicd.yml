@@ -82,11 +82,16 @@ jobs:
       - name: Set secrets
         run: |-
           kubectl delete secret location-db-credentials -n acua || true
+          kubectl delete secret ticket-db-credentials -n acua || true
 
           kubectl create secret generic location-db-credentials -n acua \
             --from-literal=database="locationdb" \
             --from-literal=username="locationdb" \
             --from-literal=password="${{ secrets.LOCATION_DB_PASSWORD }}"
+          kubectl create secret generic ticket-db-credentials -n acua \
+            --from-literal=database="ticketdb" \
+            --from-literal=username="ticketdb" \
+            --from-literal=password="${{ secrets.TICKET_DB_PASSWORD }}"
 
       # Deploy the Docker image to the GKE cluster
       - name: Deploy

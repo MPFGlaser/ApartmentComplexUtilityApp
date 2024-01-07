@@ -65,10 +65,14 @@ export function AuthProvider({
   }, [currentUser]);
 
   const userHasClaim = useCallback(
-    (claim: string[]) => {
+    (claims: string[]) => {
       if (!currentUser) return Promise.reject(new Error('No user signed in'));
-      return currentUser.getIdTokenResult().then((idTokenResult) => {
-        return claim.some((claim) => idTokenResult.claims[claim]);
+      return currentUser.getIdTokenResult().then((decodedToken) => {
+        const tokenClaims =
+          // Firebase tokens really have a property called 'claims'
+          // that contain the user data in a token, including the custom 'claims' array...
+          (decodedToken['claims']['claims'] as string[]) || [];
+        return claims.some((claim) => tokenClaims.includes(claim));
       });
     },
     [currentUser]

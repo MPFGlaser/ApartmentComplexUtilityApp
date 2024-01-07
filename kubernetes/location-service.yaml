@@ -21,7 +21,7 @@ spec:
       serviceAccountName: acua-ksa
       containers:
       - name: location-service
-        image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/location-service:0.1.2
+        image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/location-service:0.2.0
         imagePullPolicy: IfNotPresent
         env:
           - name: DATABASE_HOST

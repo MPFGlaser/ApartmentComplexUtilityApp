@@ -47,10 +47,20 @@ export default function Navigation(props: Readonly<NavigationProps>) {
     if (!currentUser) {
       return (
         <Grid container justifyContent="space-between" sx={{ display: 'flex' }}>
-          <Button variant="contained" component={Link} to="/login">
+          <Button
+            variant="contained"
+            component={Link}
+            to="/login"
+            onClick={handleDrawerToggle}
+          >
             Login
           </Button>
-          <Button variant="outlined" component={Link} to="/signup">
+          <Button
+            variant="outlined"
+            component={Link}
+            to="/signup"
+            onClick={handleDrawerToggle}
+          >
             Sign up
           </Button>
         </Grid>
@@ -68,10 +78,21 @@ export default function Navigation(props: Readonly<NavigationProps>) {
             {currentUser.displayName}
           </Typography>
           <Box display="flex">
-            <IconButton component={Link} to="/edit-profile">
+            <IconButton
+              component={Link}
+              to="/edit-profile"
+              onClick={handleDrawerToggle}
+            >
               <ManageAccountsIcon />
             </IconButton>
-            <IconButton onClick={(e) => handleSignout()}>
+            <IconButton
+              component={Link}
+              to="/"
+              onClick={(e) => {
+                handleDrawerToggle();
+                handleSignout();
+              }}
+            >
               <LogoutIcon />
             </IconButton>
           </Box>
@@ -92,6 +113,7 @@ export default function Navigation(props: Readonly<NavigationProps>) {
             component={Link}
             to={item.path}
             style={{ textDecoration: 'none', color: 'inherit' }}
+            onClick={handleDrawerToggle}
           >
             <ListItemButton>
               <ListItemIcon>{item.icon}</ListItemIcon>

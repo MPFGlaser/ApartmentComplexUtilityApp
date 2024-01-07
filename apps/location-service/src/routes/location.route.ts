@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', ...validate(locationSchema), async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const result = await locationService.getLocationById(req.params.id);
 
@@ -48,7 +48,7 @@ router.get('/by-owner/me', async (req, res) => {
 router.get(
   '/by-owner/:ownerId',
   authenticated(['admin']),
-  ...validate(locationSchema),
+
   async (req, res) => {
     try {
       const result = await locationService.getLocationByOwner(

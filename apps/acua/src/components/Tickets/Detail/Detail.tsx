@@ -9,26 +9,76 @@ import {
   Paper,
   Select,
   SelectChangeEvent,
+  Skeleton,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import { ITicket } from '../../../interfaces/ticket.interface';
+import ticketService from '../../../services/ticket.service';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { TicketStatus } from '../../../enums/TicketStatus.enum';
+import { useAuth } from '../../../util/AuthProvider';
+import locationService from '../../../services/location.service';
+import { ILocation } from '../../../interfaces/location.interface';
 
 /* eslint-disable-next-line */
 export interface DetailProps {}
 
 export function Detail(props: DetailProps) {
-  const [status, setStatus] = React.useState('Open');
-  const [createDate, setCreateDate] = React.useState('2023-12-29');
-  const [updateDate, setUpdateDate] = React.useState('2023-12-29');
-  const [author, setAuthor] = React.useState('John Doe');
-  const [location, setLocation] = React.useState('Apartment 2, Kitchen');
-  const [title, setTitle] = React.useState('Broken sink');
-  const [description, setDescription] = React.useState(
-    "My sink is broken and the water won't drain out properly. Please come and fix it. Thank you!"
-  );
+  const [ticket, setTicket] = useState<ITicket | null>(null);
+  const [location, setLocation] = useState<ILocation | null>(null);
+  const [userIsPrivileged, setUserIsPrivileged] = useState(false);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value as string);
+  const { id } = useParams<{ id: string }>();
+  const { userHasClaim } = useAuth();
+
+  const statusTexts = {
+    open: 'Open',
+    pending: 'Pending',
+    inprogress: 'In Progress',
+    completed: 'Completed',
+    wontfix: "Won't Fix",
+  };
+
+  useEffect(() => {
+    const fetchTicket = async () => {
+      if (!id) {
+        return;
+      }
+      const data = await ticketService.getTicketById(id);
+      setTicket(data);
+    };
+
+    fetchTicket();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchLocation = async () => {
+      if (ticket?.location) {
+        const data = await locationService.getLocationById(ticket.location);
+        setLocation(data);
+      }
+    };
+
+    fetchLocation();
+  }, [ticket]);
+
+  useEffect(() => {
+    (async () => {
+      const result = await userHasClaim(['admin', 'manager', 'staff']);
+      setUserIsPrivileged(result);
+    })();
+  });
+
+  const handleStatusChange = async (event: SelectChangeEvent<TicketStatus>) => {
+    const newStatus = event.target.value as TicketStatus;
+
+    if (!id || !ticket) {
+      return;
+    }
+    await ticketService.updateTicketStatus(id, newStatus);
+
+    setTicket({ ...ticket, status: newStatus });
   };
 
   return (
@@ -40,52 +90,80 @@ export function Detail(props: DetailProps) {
             p: 2,
           }}
         >
-          <Typography variant="h4">{title}</Typography>
+          <Typography variant="h4">{ticket?.title}</Typography>
           <Divider variant="middle" />
           <Box sx={{ my: 2 }}>
             <Typography variant="h6">Repair Request Details</Typography>
-            <Typography variant="body1">Status: {status}</Typography>
-            <Typography variant="body1">Created on: {createDate}</Typography>
-            <Typography variant="body1">Last updated: {updateDate}</Typography>
-            <Typography variant="body1">From: {author}</Typography>
-            <Typography variant="body1">Location: {location}</Typography>
+            <Typography variant="body1">
+              Status: {ticket?.status ? statusTexts[ticket.status] : ''}
+            </Typography>
+            <Typography variant="body1">
+              Created on:{' '}
+              {ticket?.createdAt
+                ? new Date(ticket.createdAt).toLocaleString('en-GB')
+                : ''}
+            </Typography>
+            <Typography variant="body1">
+              Last updated:{' '}
+              {ticket?.updatedAt
+                ? new Date(ticket.updatedAt).toLocaleString('en-GB')
+                : ''}
+            </Typography>
+            <Typography variant="body1">From: {ticket?.creator}</Typography>
+            <Typography variant="body1">
+              Location:{' '}
+              {location ? (
+                location.name
+              ) : (
+                <Box component="span" display="inline-block">
+                  <Skeleton width={100} />
+                </Box>
+              )}
+            </Typography>
           </Box>
           <Divider variant="middle" />
           <Box sx={{ my: 2 }}>
             <Typography variant="h6">Description</Typography>
-            <p>{description}</p>
+            <p>{ticket?.description}</p>
           </Box>
-          <Divider variant="middle" />
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-            }}
-          >
-            <FormControl
-              sx={{
-                my: 2,
-                ml: 'auto',
-                width: 200,
-              }}
-            >
-              <InputLabel id="demo-simple-select-label">Status</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={status}
-                label="Status"
-                onChange={handleChange}
+
+          {userIsPrivileged ? (
+            <Box>
+              <Divider variant="middle" />
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}
               >
-                <MenuItem value={'Open'}>Open</MenuItem>
-                <MenuItem value={'Pending'}>Pending</MenuItem>
-                <MenuItem value={'In Progress'}>In Progress</MenuItem>
-                <MenuItem value={'Completed'}>Completed</MenuItem>
-                <MenuItem value={"Won't fix"}>Won't fix</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+                <FormControl
+                  sx={{
+                    my: 2,
+                    ml: 'auto',
+                    width: 200,
+                  }}
+                >
+                  <InputLabel id="ticket-status-select-label">
+                    Status
+                  </InputLabel>
+                  <Select
+                    labelId="ticket-status-select-label"
+                    id="ticket-status-select"
+                    value={ticket?.status || ''}
+                    label="Status"
+                    onChange={handleStatusChange}
+                  >
+                    {Object.entries(statusTexts).map(([value, text]) => (
+                      <MenuItem value={value} key={value}>
+                        {text}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>{' '}
+            </Box>
+          ) : null}
         </Box>
       </Paper>
     </Container>
