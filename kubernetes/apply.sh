@@ -8,3 +8,4 @@ kubectl apply -f ./namespace.yaml \
 -f ./ingress.yaml \
 -f ./acua.yaml \
 -f ./location-service.yaml \
+-f ./ticket-service.yaml \
