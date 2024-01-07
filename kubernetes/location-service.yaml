@@ -24,11 +24,6 @@ spec:
         image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/location-service:0.1.2
         imagePullPolicy: IfNotPresent
         env:
-          - name: FIREBASE_CONFIG
-            valueFrom:
-              secretKeyRef:
-                name: acua-backend-secrets
-                key: firebase-config
           - name: DATABASE_HOST
             value: "127.0.0.1"
           - name: DATABASE_PORT

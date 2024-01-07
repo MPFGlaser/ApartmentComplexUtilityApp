@@ -81,12 +81,7 @@ jobs:
       # Set kubernetes secrets by deleting existing ones and creating them again, which allows for updating values.
       - name: Set secrets
         run: |-
-          kubectl delete secret acua-backend-secrets -n acua || true
           kubectl delete secret location-db-credentials -n acua || true
-
-          printf "%s" "${{ secrets.FIREBASE_CONFIG }}" > firebase-config.json
-          kubectl create secret generic acua-backend-secrets -n acua \
-            --from-file=firebase-config=firebase-config.json
 
           kubectl create secret generic location-db-credentials -n acua \
             --from-literal=database="locationdb" \
