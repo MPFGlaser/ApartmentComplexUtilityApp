@@ -1,23 +1,27 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import Table from '../../components/Tickets/Table/Table';
 import { Link } from 'react-router-dom';
-import { Ticket } from '../../types/Ticket';
+import { useEffect, useState } from 'react';
+import ticketService from '../../services/ticket.service';
+import { ITicket } from '../../interfaces/ticket.interface';
 
 /* eslint-disable-next-line */
 export interface TicketOverviewProps {}
 
-const tickets: Ticket[] = [
-  {
-    id: 1,
-    title: 'Broken sink',
-    date: '2021-10-10',
-    status: 'Open',
-    author: 'John Doe',
-    updateDate: '2021-10-10',
-  },
-];
-
 export function TicketOverview(props: TicketOverviewProps) {
+  const [tickets, setTickets] = useState<ITicket[]>([]);
+
+  useEffect(() => {
+    ticketService
+      .getTickets()
+      .then((response) => {
+        setTickets(response);
+      })
+      .catch((error) => {
+        console.error('Error fetching tickets', error);
+      });
+  }, []);
+
   return (
     <Container>
       <Box
