@@ -86,9 +86,11 @@ export default function Navigation(props: Readonly<NavigationProps>) {
               <ManageAccountsIcon />
             </IconButton>
             <IconButton
+              component={Link}
+              to="/"
               onClick={(e) => {
-                handleSignout();
                 handleDrawerToggle();
+                handleSignout();
               }}
             >
               <LogoutIcon />
