@@ -101,8 +101,8 @@ export function Detail(props: DetailProps) {
             </Typography>
             <Typography variant="body1">
               Created on:{' '}
-              {ticket?.updatedAt
-                ? new Date(ticket.updatedAt).toLocaleString('en-GB')
+              {ticket?.createdAt
+                ? new Date(ticket.createdAt).toLocaleString('en-GB')
                 : ''}
             </Typography>
             <Typography variant="body1">
