@@ -101,11 +101,9 @@ router.delete(
 
 router.delete('/delete-my-data', authenticated(), async (req, res) => {
   try {
-    const result = await userService.deleteUserData(req.body.uid);
+    await userService.handleDeleteUserDataRequest(req.body.uid);
 
-    if (!result) return res.status(404).send({ message: 'No User found' });
-
-    return res.send(result);
+    return res.send({ message: 'User data delete request sent' });
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });

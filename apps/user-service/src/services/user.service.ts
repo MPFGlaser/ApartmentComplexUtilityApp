@@ -1,4 +1,4 @@
-import { auth } from '@acua/microservice-shared';
+import { MessageTopic, auth, getTopic } from '@acua/microservice-shared';
 import { UserClaim } from '../enums/UserClaim.enum';
 import { UserRecord } from 'firebase-admin/lib/auth';
 
@@ -81,9 +81,24 @@ class UserService {
     }
   }
 
-  public async deleteUserData(id: string) {
-    throw new Error('Not implemented');
-    return id;
+  public async handleDeleteUserDataRequest(target: string) {
+    try {
+      const topic = await getTopic(MessageTopic.DeleteUserData);
+
+      topic.publishMessage({ data: Buffer.from(target) });
+      console.log(`Message ${target} published.`);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // This is a separate function, to make sure that the message is actually sent out before the user is deleted.
+  public async handleDeleteUserDataResponse(target: string) {
+    try {
+      await auth.deleteUser(target);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
