@@ -43,6 +43,19 @@ router.get(
   }
 );
 
+router.get('/:uid/display-name', authenticated(), async (req, res) => {
+  try {
+    const user = await auth.getUser(req.params.uid);
+
+    if (!user) return res.status(404).send({ message: 'User not found' });
+
+    return res.send({ name: user.displayName });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: 'Internal server error' });
+  }
+});
+
 router.post(
   '/grant-claim',
   authenticated([UserClaim.Admin, UserClaim.Manager]),
