@@ -20,6 +20,7 @@ import { TicketStatus } from '../../../enums/TicketStatus.enum';
 import { useAuth } from '../../../util/AuthProvider';
 import locationService from '../../../services/location.service';
 import { ILocation } from '../../../interfaces/location.interface';
+import userService from '../../../services/user.service';
 
 /* eslint-disable-next-line */
 export interface DetailProps {}
@@ -27,6 +28,7 @@ export interface DetailProps {}
 export function Detail(props: DetailProps) {
   const [ticket, setTicket] = useState<ITicket | null>(null);
   const [location, setLocation] = useState<ILocation | null>(null);
+  const [displayName, setDisplayName] = useState<string | null>(null);
   const [userIsPrivileged, setUserIsPrivileged] = useState(false);
 
   const { id } = useParams<{ id: string }>();
@@ -61,6 +63,15 @@ export function Detail(props: DetailProps) {
     };
 
     fetchLocation();
+
+    const fetchDisplayName = async () => {
+      if (ticket?.creator) {
+        const data = await userService.getDisplayNameByUid(ticket.creator);
+        setDisplayName(data);
+      }
+    };
+
+    fetchDisplayName();
   }, [ticket]);
 
   useEffect(() => {
@@ -109,7 +120,14 @@ export function Detail(props: DetailProps) {
                 ? new Date(ticket.updatedAt).toLocaleString('en-GB')
                 : ''}
             </Typography>
-            <Typography variant="body1">From: {ticket?.creator}</Typography>
+            <Typography variant="body1">
+              From:{' '}
+              {displayName ?? (
+                <Box component="span" display="inline-block">
+                  <Skeleton width={100} />
+                </Box>
+              )}
+            </Typography>
             <Typography variant="body1">
               Location:{' '}
               {location ? (
