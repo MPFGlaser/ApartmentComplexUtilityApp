@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
 
     if (!result) return res.status(404).send({ message: 'No locations found' });
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
 
     if (!result) return res.status(404).send({ message: 'Location not found' });
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -38,7 +38,7 @@ router.get('/by-owner/me', async (req, res) => {
 
     if (!result) return res.status(404).send({ message: 'Location not found' });
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -58,7 +58,7 @@ router.get(
       if (!result)
         return res.status(404).send({ message: 'Location not found' });
 
-      return res.send(result);
+      return res.status(200).json(result);
     } catch (error) {
       console.error(error);
       return res.status(500).send({ message: 'Internal server error' });
@@ -77,7 +77,7 @@ router.post('/', ...validate(locationSchema), async (req, res) => {
 
     if (!result) return res.status(404).send({ message: 'Location not found' });
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -101,7 +101,7 @@ router.put('/:id', ...validate(locationSchema), async (req, res) => {
       req.body
     );
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -122,7 +122,7 @@ router.delete('/:id', async (req, res) => {
 
     const result = await locationService.deleteLocation(req.params.id);
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });

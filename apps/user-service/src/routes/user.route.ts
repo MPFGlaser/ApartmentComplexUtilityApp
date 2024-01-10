@@ -18,7 +18,7 @@ router.get(
 
       if (!result) return res.status(404).send({ message: 'No Users found' });
 
-      return res.send(result);
+      return res.status(200).json(result);
     } catch (error) {
       console.error(error);
       return res.status(500).send({ message: 'Internal server error' });
@@ -35,7 +35,7 @@ router.get(
 
       if (!result) return res.status(404).send({ message: 'No Users found' });
 
-      return res.send(result);
+      return res.status(200).json(result);
     } catch (error) {
       console.error(error);
       return res.status(500).send({ message: 'Internal server error' });
@@ -49,7 +49,7 @@ router.get('/:uid/display-name', authenticated(), async (req, res) => {
 
     if (!user) return res.status(404).send({ message: 'User not found' });
 
-    return res.send({ name: user.displayName });
+    return res.status(200).json({ name: user.displayName });
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -70,7 +70,7 @@ router.post(
 
       await userService.grantClaims(target, claimsToGrant);
 
-      return res.send({ message: 'Role(s) granted' });
+      return res.status(200).json({ message: 'Role(s) granted' });
     } catch (error) {
       console.error(error);
       return res.status(500).send({ message: 'Internal server error' });
@@ -104,7 +104,7 @@ router.delete(
         await auth.setCustomUserClaims(target, userClaims);
       }
 
-      return res.send({ message: 'Role revoked' });
+      return res.status(200).json({ message: 'Role revoked' });
     } catch (error) {
       console.error(error);
       return res.status(500).send({ message: 'Internal server error' });
@@ -116,7 +116,9 @@ router.delete('/delete-my-data', authenticated(), async (req, res) => {
   try {
     await userService.handleDeleteUserDataRequest(req.body.uid);
 
-    return res.send({ message: 'User data delete request received' });
+    return res
+      .status(200)
+      .json({ message: 'User data delete request received' });
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });

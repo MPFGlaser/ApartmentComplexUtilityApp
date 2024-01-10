@@ -8,7 +8,6 @@ import {
 } from '../validators/ticket.validator';
 import TicketService from '../services/ticket.service';
 import { ITicket } from '../interfaces/ticket.interface';
-import { UserClaim } from '../../../user-service/src/enums/UserClaim.enum';
 
 const router = Router();
 
@@ -18,7 +17,7 @@ router.get('/', async (req, res) => {
 
     if (!result) return res.status(404).send({ message: 'No Tickets found' });
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -31,7 +30,7 @@ router.get('/:id', ...validate(getTicketSchema), async (req, res) => {
 
     if (!result) return res.status(404).send({ message: 'Ticket not found' });
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -44,7 +43,7 @@ router.get('/by-creator/me', async (req, res) => {
 
     if (!result) return res.status(404).send({ message: 'Ticket not found' });
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -62,7 +61,7 @@ router.get(
 
       if (!result) return res.status(404).send({ message: 'Ticket not found' });
 
-      return res.send(result);
+      return res.status(200).json(result);
     } catch (error) {
       console.error(error);
       return res.status(500).send({ message: 'Internal server error' });
@@ -83,7 +82,7 @@ router.post('/', ...validate(createTicketSchema), async (req, res) => {
 
     if (!result) return res.status(404).send({ message: 'Ticket not found' });
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -102,7 +101,7 @@ router.put('/:id', ...validate(updateTicketSchema), async (req, res) => {
 
     const result = await TicketService.updateTicket(req.params.id, req.body);
 
-    return res.send(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });
@@ -125,7 +124,7 @@ router.put(
         req.body.status
       );
 
-      return res.send(result);
+      return res.status(200).json(result);
     } catch (error) {
       console.error(error);
       return res.status(500).send({ message: 'Internal server error' });
@@ -133,24 +132,20 @@ router.put(
   }
 );
 
-router.delete(
-  '/:id',
-  authenticated([UserClaim.Admin, UserClaim.Manager]),
-  async (req, res) => {
-    try {
-      const TicketToDelete = await TicketService.getTicketById(req.params.id);
+router.delete('/:id', authenticated(['admin', 'manager']), async (req, res) => {
+  try {
+    const TicketToDelete = await TicketService.getTicketById(req.params.id);
 
-      if (!TicketToDelete)
-        return res.status(404).send({ message: 'Ticket not found' });
+    if (!TicketToDelete)
+      return res.status(404).send({ message: 'Ticket not found' });
 
-      await TicketService.deleteTicket(req.params.id);
+    await TicketService.deleteTicket(req.params.id);
 
-      return res.status(200).send({ message: 'Ticket deleted' });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).send({ message: 'Internal server error' });
-    }
+    return res.status(200).send({ message: 'Ticket deleted' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: 'Internal server error' });
   }
-);
+});
 
 export default router;
