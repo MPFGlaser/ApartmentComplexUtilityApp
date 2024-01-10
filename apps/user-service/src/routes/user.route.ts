@@ -116,7 +116,7 @@ router.delete('/delete-my-data', authenticated(), async (req, res) => {
   try {
     await userService.handleDeleteUserDataRequest(req.body.uid);
 
-    return res.send({ message: 'User data delete request sent' });
+    return res.send({ message: 'User data delete request received' });
   } catch (error) {
     console.error(error);
     return res.status(500).send({ message: 'Internal server error' });

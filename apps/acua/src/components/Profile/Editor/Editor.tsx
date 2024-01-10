@@ -15,6 +15,8 @@ import { useAuth } from '../../../util/AuthProvider';
 import { ILocation } from '../../../interfaces/location.interface';
 import locationService from '../../../services/location.service';
 import DialogComponent from '../../DialogComponent/DialogComponent';
+import { useSnackbar } from '../../../util/SnackbarContext';
+import userService from '../../../services/user.service';
 
 /* eslint-disable-next-line */
 export interface EditorProps {}
@@ -27,8 +29,8 @@ export function Editor(props: EditorProps) {
   const [locationName, setLocationName] = React.useState('');
   const [openCancelDialog, setOpenCancelDialog] = React.useState(false);
   const [openDeleteDataDialog, setOpenDeleteDataDialog] = React.useState(false);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] =
-    React.useState(false);
+
+  const showSnackbar = useSnackbar();
 
   const navigate = useNavigate();
 
@@ -51,16 +53,30 @@ export function Editor(props: EditorProps) {
   };
 
   const handleDataDelete = (confirm: boolean) => {
-    if (confirm) {
-      // Delete data
-    }
     setOpenDeleteDataDialog(false);
-    setOpenDeleteConfirmation(true);
-    setTimeout(() => {
-      // signOut();
-      setOpenDeleteConfirmation(false);
-      navigate('/');
-    }, 5000);
+    if (confirm) {
+      userService
+        .requestAccountDeletion()
+        .then(() => {
+          // Delete data
+          showSnackbar({
+            message: 'Account deletion requested.',
+            severity: 'success',
+            isAlert: true,
+            duration: 5000,
+          });
+          signOut();
+          navigate('/');
+        })
+        .catch((error) => {
+          showSnackbar({
+            message: 'Something went wrong. Please try again later.',
+            severity: 'error',
+            isAlert: true,
+            duration: 5000,
+          });
+        });
+    }
   };
 
   const handleSave = async () => {
@@ -182,15 +198,6 @@ export function Editor(props: EditorProps) {
               },
             ]}
             onClose={() => handleDataDelete(false)}
-          />
-          <DialogComponent
-            open={openDeleteConfirmation}
-            title="Account deletion requested."
-            content={[
-              'Your account will be deleted.',
-              'You will be logged out shortly.',
-            ]}
-            onClose={() => handleCancel(false)}
           />
         </>
       );

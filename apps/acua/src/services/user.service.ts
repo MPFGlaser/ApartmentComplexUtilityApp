@@ -13,6 +13,12 @@ class UserService extends ApiService {
 
     return response.data.name;
   }
+
+  public async requestAccountDeletion() {
+    const response = await axios.delete(`${this.url}/delete-my-data`);
+
+    return response.data;
+  }
 }
 
 export default new UserService();
