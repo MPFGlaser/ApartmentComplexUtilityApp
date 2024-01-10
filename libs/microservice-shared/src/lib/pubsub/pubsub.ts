@@ -63,5 +63,9 @@ export function generateSubscriptionName(
   topicName: MessageTopic,
   service: string
 ): string {
-  return `${service}-${topicName}`;
+  // start from the last /
+  const lastSlash = topicName.lastIndexOf('/');
+  // get the topic name without the /
+  const topicShortName = topicName.substring(lastSlash + 1);
+  return `${topicShortName}-${service}`;
 }

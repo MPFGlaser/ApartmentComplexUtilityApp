@@ -1,3 +1,3 @@
 export enum MessageTopic {
-  DeleteUserData = 'delete-user-data',
+  DeleteUserData = 'projects/mpfg-acua/topics/delete-user-data',
 }
