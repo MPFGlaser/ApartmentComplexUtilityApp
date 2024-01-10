@@ -3,11 +3,6 @@ import {
   Button,
   ButtonGroup,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Divider,
   Paper,
   TextField,
@@ -19,17 +14,21 @@ import { updateProfile } from 'firebase/auth';
 import { useAuth } from '../../../util/AuthProvider';
 import { ILocation } from '../../../interfaces/location.interface';
 import locationService from '../../../services/location.service';
+import DialogComponent from '../../DialogComponent/DialogComponent';
 
 /* eslint-disable-next-line */
 export interface EditorProps {}
 
 export function Editor(props: EditorProps) {
-  const { currentUser, getUser } = useAuth();
+  const { currentUser, getUser, signOut } = useAuth();
 
   const [displayName, setDisplayName] = React.useState('');
   const [location, setLocation] = React.useState<ILocation | null>(null); // [location, setLocation
   const [locationName, setLocationName] = React.useState('');
-  const [open, setOpen] = React.useState(false);
+  const [openCancelDialog, setOpenCancelDialog] = React.useState(false);
+  const [openDeleteDataDialog, setOpenDeleteDataDialog] = React.useState(false);
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] =
+    React.useState(false);
 
   const navigate = useNavigate();
 
@@ -44,11 +43,24 @@ export function Editor(props: EditorProps) {
     }
   }, [currentUser]);
 
-  const handleClose = (confirm: boolean) => {
+  const handleCancel = (confirm: boolean) => {
     if (confirm) {
       navigate(-1);
     }
-    setOpen(false);
+    setOpenCancelDialog(false);
+  };
+
+  const handleDataDelete = (confirm: boolean) => {
+    if (confirm) {
+      // Delete data
+    }
+    setOpenDeleteDataDialog(false);
+    setOpenDeleteConfirmation(true);
+    setTimeout(() => {
+      // signOut();
+      setOpenDeleteConfirmation(false);
+      navigate('/');
+    }, 5000);
   };
 
   const handleSave = async () => {
@@ -115,44 +127,71 @@ export function Editor(props: EditorProps) {
               display: 'flex',
               flexDirection: 'row',
               alignContent: 'center',
+              justifyContent: 'space-between',
             }}
           >
             <ButtonGroup variant="contained">
               <Button color="primary" onClick={() => handleSave()}>
                 Save
               </Button>
-              <Button color="error" onClick={() => setOpen(true)}>
+              <Button color="error" onClick={() => setOpenCancelDialog(true)}>
                 Cancel
               </Button>
             </ButtonGroup>
+            <Button color="error" onClick={() => setOpenDeleteDataDialog(true)}>
+              Delete my account
+            </Button>
           </Box>
-          <Dialog
-            open={open}
-            onClose={() => handleClose(false)}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              Are you sure you want to cancel and go back?
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                All changes will be lost.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => handleClose(false)} color="primary">
-                No
-              </Button>
-              <Button
-                onClick={() => handleClose(true)}
-                color="primary"
-                autoFocus
-              >
-                Yes
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <DialogComponent
+            open={openCancelDialog}
+            title="Are you sure you want to cancel and go back?"
+            content="All changes will be lost."
+            buttons={[
+              {
+                id: 'cancel',
+                text: 'No',
+                callback: () => handleCancel(false),
+              },
+              {
+                id: 'confirm',
+                text: 'Yes',
+                color: 'error',
+                callback: () => handleCancel(true),
+              },
+            ]}
+            onClose={() => handleCancel(false)}
+          />
+          <DialogComponent
+            open={openDeleteDataDialog}
+            title="Are you sure you want to delete your account?"
+            content={[
+              'Your personal data will be permanently deleted and repair requests will be anonymised.',
+              'This action cannot be undone.',
+            ]}
+            buttons={[
+              {
+                id: 'cancel',
+                text: 'No, take me back',
+                callback: () => handleDataDelete(false),
+              },
+              {
+                id: 'confirm',
+                text: 'Yes, delete my account',
+                color: 'error',
+                callback: () => handleDataDelete(true),
+              },
+            ]}
+            onClose={() => handleDataDelete(false)}
+          />
+          <DialogComponent
+            open={openDeleteConfirmation}
+            title="Account deletion requested."
+            content={[
+              'Your account will be deleted.',
+              'You will be logged out shortly.',
+            ]}
+            onClose={() => handleCancel(false)}
+          />
         </>
       );
     }
