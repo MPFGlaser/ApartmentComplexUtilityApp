@@ -119,7 +119,7 @@ Start the gcloud pubsub emulator
 gcloud beta emulators pubsub start --project=mpfg-acua-dev
 ```
 
-Set up the gcloud pubsub emulator environment variables
+Set up the gcloud pubsub emulator environment variables. Run this in the terminal you wish to use to run the project, or alternatively, add it to your `.bashrc` or `.zshrc` file.
 
 ```sh
 $(gcloud beta emulators pubsub env-init)
@@ -131,7 +131,7 @@ Some apps might have environment variables that have to be set up. Check each in
 
 ## Running
 
-To run an app in the monorepo, run the following command, substituted by the name of the app (as found in `/apps`
+To run an app in the monorepo, run the following command, substituted by the name of the app (as found in `/apps`)
 
 ```sh
 npx nx serve $app-name
@@ -146,5 +146,13 @@ npx nx serve auth-service
 To run multiple apps at once, use:
 
 ```sh
-nx run-many --target=serve --projects=acua,location-service,ticket-service,user-service
+nx run-many --target serve --maxParallel=100
+```
+
+The `--maxParallel` flag is used to override the default maximum of 3 apps. The `--exclude` flag can be used to exclude apps from the command.
+
+To serve all apps at once, use:
+
+```sh
+nx run-many --target serve
 ```
