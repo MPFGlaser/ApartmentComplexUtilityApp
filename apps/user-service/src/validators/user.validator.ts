@@ -3,6 +3,7 @@ import { UserClaim } from '../enums/UserClaim.enum';
 
 export const claimGrantSchema = checkSchema({
   targetId: {
+    optional: true,
     isString: {
       errorMessage: 'Target ID should be a string',
     },
@@ -23,6 +24,7 @@ export const claimGrantSchema = checkSchema({
 
 export const claimRevokeSchema = checkSchema({
   targetId: {
+    optional: true,
     isString: {
       errorMessage: 'Target ID should be a string',
     },

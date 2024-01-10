@@ -56,6 +56,7 @@ router.get('/:uid/display-name', authenticated(), async (req, res) => {
   }
 });
 
+// Example: axios.post('/api/user/grant-claim', { claims: ['admin'] });
 router.post(
   '/grant-claim',
   authenticated([UserClaim.Admin, UserClaim.Manager]),
@@ -63,7 +64,7 @@ router.post(
   async (req, res) => {
     try {
       const claimsToGrant = req.body.claims;
-      const target = req.body.targetId || req.user.uid;
+      const target = req.body.targetId || req.body.uid;
 
       if (!target || !claimsToGrant)
         return res.status(400).send({ message: 'Bad request' });
@@ -78,7 +79,8 @@ router.post(
   }
 );
 
-router.delete(
+// Example: axios.put('/api/user/revoke-claim', { claims: ['admin'] });
+router.put(
   '/revoke-claim',
   ...validate(claimRevokeSchema),
   authenticated([UserClaim.Admin, UserClaim.Manager]),
@@ -90,21 +92,9 @@ router.delete(
       if (!target || !claimsToRevoke)
         return res.status(400).send({ message: 'Bad request' });
 
-      const user = await auth.getUser(target);
+      await userService.revokeClaims(target, claimsToRevoke);
 
-      if (!user) return res.status(404).send({ message: 'User not found' });
-
-      if (claimsToRevoke.includes('*')) {
-        await auth.setCustomUserClaims(target, null);
-      } else {
-        const userClaims = user.customClaims || {};
-        claimsToRevoke.forEach((claim: string) => {
-          delete userClaims[claim];
-        });
-        await auth.setCustomUserClaims(target, userClaims);
-      }
-
-      return res.status(200).json({ message: 'Role revoked' });
+      return res.status(200).json({ message: 'Role(s) revoked' });
     } catch (error) {
       console.error(error);
       return res.status(500).send({ message: 'Internal server error' });
