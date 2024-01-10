@@ -1,19 +1,16 @@
 import {
-  Alert as MuiAlert,
-  AlertProps,
   Box,
   Button,
   FormControl,
   Grid,
   Paper,
-  Snackbar,
   TextField,
   Typography,
   Checkbox,
   FormGroup,
   FormControlLabel,
 } from '@mui/material';
-import React, { MouseEvent, useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../../util/firebase';
 import {
@@ -22,16 +19,10 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { convertErrorToMessage } from '../../util/ErrorHandler';
+import { useSnackbar } from '../../util/SnackbarContext';
 
 /* eslint-disable-next-line */
 export interface LoginProps {}
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 export function Signup(props: LoginProps) {
   const navigate = useNavigate();
@@ -41,34 +32,27 @@ export function Signup(props: LoginProps) {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [terms, setTerms] = useState(false);
 
-  const [snackbarVisiblity, setSnackbarVisiblity] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-
-  const handleSnackbarClose = (
-    _event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setSnackbarVisiblity(false);
-    setSnackbarMessage('');
-  };
+  const showSnackbar = useSnackbar();
 
   async function handleSignup(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
     try {
       if (password !== passwordConfirmation) {
-        setSnackbarMessage('Passwords do not match.');
-        setSnackbarVisiblity(true);
+        showSnackbar({
+          message: 'Passwords do not match.',
+          severity: 'error',
+          isAlert: true,
+        });
         return;
       }
 
       if (!terms) {
-        setSnackbarMessage('You must agree to the terms and conditions.');
-        setSnackbarVisiblity(true);
+        showSnackbar({
+          message: 'You must agree to the terms and conditions.',
+          severity: 'error',
+          isAlert: true,
+        });
         return;
       }
 
@@ -81,8 +65,11 @@ export function Signup(props: LoginProps) {
 
       navigate('/login');
     } catch (error: unknown) {
-      setSnackbarMessage(convertErrorToMessage(error));
-      setSnackbarVisiblity(true);
+      showSnackbar({
+        message: convertErrorToMessage(error),
+        severity: 'error',
+        isAlert: true,
+      });
     }
   }
 
@@ -204,19 +191,6 @@ export function Signup(props: LoginProps) {
           </Box>
         </Paper>
       </Grid>
-      <Snackbar
-        open={snackbarVisiblity}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity="error"
-          sx={{ width: '100%' }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
     </Grid>
   );
 }
