@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 import DialogComponent, {
   DialogComponentProps,
 } from '../components/DialogComponent/DialogComponent';
@@ -16,9 +16,9 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     null
   );
 
-  const showDialog = (props: DialogContextProps) => {
+  const showDialog = useCallback((props: DialogContextProps) => {
     setDialogProps(props);
-  };
+  }, []);
 
   const handleClose = () => {
     setDialogProps(null);

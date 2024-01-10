@@ -23,7 +23,7 @@ export const SnackbarProvider: React.FC<React.PropsWithChildren> = ({
   const showSnackbar = useCallback((props: SnackbarContextProps) => {
     setSnackbarProps({
       ...props,
-      isAlert: props.severity ? true : false,
+      isAlert: Boolean(props.severity),
     });
   }, []);
 
