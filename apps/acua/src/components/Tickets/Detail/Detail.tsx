@@ -12,15 +12,17 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { ITicket } from '../../../interfaces/ticket.interface';
 import ticketService from '../../../services/ticket.service';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { TicketStatus } from '../../../enums/TicketStatus.enum';
 import { useAuth } from '../../../util/AuthProvider';
 import locationService from '../../../services/location.service';
 import { ILocation } from '../../../interfaces/location.interface';
 import userService from '../../../services/user.service';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 /* eslint-disable-next-line */
 export interface DetailProps {}
@@ -33,6 +35,7 @@ export function Detail(props: DetailProps) {
 
   const { id } = useParams<{ id: string }>();
   const { userHasClaim } = useAuth();
+  const navigate = useNavigate();
 
   const statusTexts = {
     open: 'Open',
@@ -90,6 +93,14 @@ export function Detail(props: DetailProps) {
     await ticketService.updateTicketStatus(id, newStatus);
 
     setTicket({ ...ticket, status: newStatus });
+  };
+
+  const handleDelete = async () => {
+    if (!id) {
+      return;
+    }
+    await ticketService.deleteTicket(id);
+    navigate(-1);
   };
 
   return (
@@ -179,6 +190,9 @@ export function Detail(props: DetailProps) {
                     ))}
                   </Select>
                 </FormControl>
+                <IconButton aria-label="delete" onClick={handleDelete}>
+                  <DeleteIcon />
+                </IconButton>
               </Box>{' '}
             </Box>
           ) : null}
