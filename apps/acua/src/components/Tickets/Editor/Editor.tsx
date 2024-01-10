@@ -3,11 +3,6 @@ import {
   Button,
   ButtonGroup,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Divider,
   Paper,
   Skeleton,
@@ -19,6 +14,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import locationService from '../../../services/location.service';
 import { ILocation } from '../../../interfaces/location.interface';
+import { useDialog } from '../../../util/DialogContext';
 
 /* eslint-disable-next-line */
 export interface EditorProps {}
@@ -28,10 +24,8 @@ export function Editor(props: EditorProps) {
   const [description, setDescription] = React.useState('');
   const [location, setLocation] = React.useState<ILocation | null>(null);
 
-  const [open, setOpen] = React.useState(false);
-  const [action, setAction] = React.useState('');
-
   const navigate = useNavigate();
+  const showDialog = useDialog();
 
   useEffect(() => {
     const fetchLocation = async () => {
@@ -42,24 +36,45 @@ export function Editor(props: EditorProps) {
     fetchLocation();
   }, []);
 
-  const handleOpen = (action: string) => {
-    setAction(action);
-    setOpen(true);
+  const openClearDialog = () => {
+    showDialog({
+      title: 'Are you sure you want to clear the form?',
+      content: 'All changes will be lost.',
+      buttons: [
+        {
+          id: 'cancel',
+          text: 'No',
+        },
+        {
+          id: 'confirm',
+          text: 'Yes',
+          color: 'error',
+          callback: () => {
+            setTitle('');
+            setDescription('');
+          },
+        },
+      ],
+    });
   };
 
-  const handleClose = (confirm: boolean) => {
-    if (confirm && action === 'clear') {
-      handleClear();
-    } else if (confirm && action === 'cancel') {
-      navigate(-1);
-    }
-
-    setOpen(false);
-  };
-
-  const handleClear = () => {
-    setTitle('');
-    setDescription('');
+  const openCancelDialog = () => {
+    showDialog({
+      title: 'Are you sure you want to cancel and go back?',
+      content: 'All changes will be lost.',
+      buttons: [
+        {
+          id: 'cancel',
+          text: 'No',
+        },
+        {
+          id: 'confirm',
+          text: 'Yes',
+          color: 'error',
+          callback: () => navigate(-1),
+        },
+      ],
+    });
   };
 
   const handleSave = () => {
@@ -131,40 +146,15 @@ export function Editor(props: EditorProps) {
               <Button color="primary" onClick={() => handleSave()}>
                 Save
               </Button>
-              <Button onClick={() => handleOpen('clear')} color="error">
+              <Button onClick={() => openClearDialog()} color="error">
                 Clear
               </Button>
-              <Button color="error" onClick={() => handleOpen('cancel')}>
+              <Button color="error" onClick={() => openCancelDialog()}>
                 Cancel
               </Button>
             </ButtonGroup>
           </Box>
         </Box>
-        <Dialog
-          open={open}
-          onClose={() => handleClose(false)}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {action === 'clear'
-              ? 'Are you sure you want to clear the form?'
-              : 'Are you sure you want to cancel and go back?'}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              All changes will be lost.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => handleClose(false)} color="primary">
-              No
-            </Button>
-            <Button onClick={() => handleClose(true)} color="primary" autoFocus>
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Paper>
     </Container>
   );

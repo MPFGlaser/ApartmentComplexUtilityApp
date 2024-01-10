@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-interface DialogComponentProps {
+export interface DialogComponentProps {
   open: boolean;
   title: string;
   content: string | string[];
@@ -18,7 +18,7 @@ interface DialogComponentProps {
     text: string;
     color?: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
     variant?: 'text' | 'outlined' | 'contained';
-    callback: () => void;
+    callback?: () => void;
   }[];
   onClose: () => void;
 }
@@ -58,7 +58,12 @@ const DialogComponent: React.FC<DialogComponentProps> = ({
               key={button.id}
               color={button.color ?? 'primary'}
               variant={button.variant ?? 'text'}
-              onClick={button.callback}
+              onClick={() => {
+                if (button.callback) {
+                  button.callback();
+                }
+                onClose();
+              }}
             >
               {button.text}
             </Button>

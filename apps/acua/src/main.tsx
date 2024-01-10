@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { routes } from './routes/routes';
 import { AuthProvider } from './util/AuthProvider';
 import { SnackbarProvider } from './util/SnackbarContext';
+import { DialogProvider } from './util/DialogContext';
 
 const router = createBrowserRouter([
   {
@@ -22,9 +23,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <StrictMode>
     <SnackbarProvider>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      <DialogProvider>
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      </DialogProvider>
     </SnackbarProvider>
   </StrictMode>
 );
