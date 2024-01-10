@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import locationService from '../../../services/location.service';
 import { ILocation } from '../../../interfaces/location.interface';
 import { useDialog } from '../../../util/DialogContext';
+import { useSnackbar } from '../../../util/SnackbarContext';
 
 /* eslint-disable-next-line */
 export interface EditorProps {}
@@ -26,6 +27,7 @@ export function Editor(props: EditorProps) {
 
   const navigate = useNavigate();
   const showDialog = useDialog();
+  const showSnackbar = useSnackbar();
 
   useEffect(() => {
     const fetchLocation = async () => {
@@ -85,6 +87,10 @@ export function Editor(props: EditorProps) {
       title,
       description,
       location: location?.id,
+    });
+    showSnackbar({
+      message: 'Repair request created',
+      severity: 'success',
     });
     navigate(-1);
   };

@@ -63,6 +63,12 @@ export function Signup(props: LoginProps) {
       await sendEmailVerification(auth.currentUser);
       await updateProfile(auth.currentUser, { displayName });
 
+      showSnackbar({
+        message: 'Account created successfully.',
+        severity: 'success',
+        isAlert: true,
+      });
+
       navigate('/login');
     } catch (error: unknown) {
       showSnackbar({

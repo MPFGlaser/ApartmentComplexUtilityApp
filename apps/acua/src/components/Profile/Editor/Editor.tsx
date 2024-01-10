@@ -93,7 +93,6 @@ export function Editor(props: EditorProps) {
         showSnackbar({
           message: 'Account deletion requested.',
           severity: 'success',
-          isAlert: true,
           duration: 5000,
         });
         signOut();
@@ -103,7 +102,6 @@ export function Editor(props: EditorProps) {
         showSnackbar({
           message: 'Something went wrong. Please try again later.',
           severity: 'error',
-          isAlert: true,
           duration: 5000,
         });
       });
@@ -126,10 +124,20 @@ export function Editor(props: EditorProps) {
 
         // Update user data
         await updateProfile(currentUser, { displayName }).then(() => {
+          showSnackbar({
+            message: 'Profile updated',
+            severity: 'success',
+            duration: 5000,
+          });
           navigate('/');
         });
         getUser();
       } catch (error) {
+        showSnackbar({
+          message: 'Something went wrong. Please try again later.',
+          severity: 'error',
+          duration: 5000,
+        });
         console.error(error);
         // Handle the error appropriately here
       }
