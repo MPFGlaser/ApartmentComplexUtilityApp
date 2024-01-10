@@ -21,12 +21,14 @@ A gcloud project with the following APIs enabled:
 - Container File System API
 - Kubernetes Engine API
 - Cloud DNS API
+- Identity Toolkit API
 - Cloud Autoscaling API
 - Cloud SQL Admin API
-- Identity Toolkit API
 - IAM Service Account Credentials API
-- Token Service API
+- Cloud Pub/Sub API
 - Cloud Resource Manager API
+- Token Service API
+- Cloud AI Companion API
 - App Engine Admin API
 - Artifact Registry API
 - Backup for GKE API
@@ -34,10 +36,8 @@ A gcloud project with the following APIs enabled:
 - BigQuery Migration API
 - BigQuery Storage API
 - Certificate Manager API
-- Cloud AI Companion API
 - Cloud Datastore API
 - Cloud OS Login API
-- Cloud Pub/Sub API
 - Cloud Runtime Configuration API
 - Cloud SQL
 - Cloud Storage
@@ -69,16 +69,21 @@ A gcloud project with the following APIs enabled:
 
 A Google account that has the following roles on the gcloud project:
 
+- Firebase Admin
+- Firebase Authentication Admin
 - Owner
+- Service Account Token Creator
 
 A gcloud service account with the following roles on the gcloud project:
 
 - Cloud SQL Editor
+- Firebase Admin
 - Firebase Admin SDK Administrator Service Agent
 - Firebase Authentication Admin
 - Pub/Sub Publisher
 - Pub/Sub Subscriber
 - Pub/Sub Viewer
+- Service Account Token Creator
 
 ## Setup
 
