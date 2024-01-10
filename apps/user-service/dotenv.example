@@ -1,4 +1,1 @@
 PORT=3300
-
-# JSON.stringify'd version of the Firebase Admin SDK config object
-FIREBASE_CONFIG=
