@@ -4,7 +4,13 @@ import ticketRoute from './routes/ticket.route';
 import healthRoute from './routes/health.route';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { authenticated } from '@acua/microservice-shared';
+import {
+  MessageTopic,
+  authenticated,
+  generateSubscriptionName,
+  initializeSubscriber,
+} from '@acua/microservice-shared';
+import ticketService from './services/ticket.service';
 
 const app = express();
 
@@ -20,6 +26,15 @@ const corsOptions = {
       : 'http://localhost:4200',
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
+
+initializeSubscriber(
+  MessageTopic.DeleteUserData,
+  generateSubscriptionName(MessageTopic.DeleteUserData, 'ticket-service'),
+  (message) => {
+    ticketService.anonymiseTicketByCreator(message.data.toString());
+    message.ack();
+  }
+);
 
 app.use(cors(corsOptions));
 

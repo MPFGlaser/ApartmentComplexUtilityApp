@@ -36,6 +36,16 @@ class LocationService {
     const deleteLocation = await Location.destroy({ where: { id } });
     return deleteLocation;
   }
+
+  public async anonymiseLocationByOwner(ownerId: string) {
+    const anonymiseLocation = await Location.update(
+      {
+        owner: 'anonymous',
+      },
+      { where: { owner: ownerId } }
+    );
+    return anonymiseLocation;
+  }
 }
 
 export default new LocationService();
