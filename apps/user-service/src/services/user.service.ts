@@ -6,9 +6,6 @@ class UserService {
   public async getAllUsers() {
     const listAllUsers = async (nextPageToken?): Promise<UserRecord[]> => {
       const listUsersResult = await auth.listUsers(1000, nextPageToken);
-      // let users = listUsersResult.users.map((userRecord) =>
-      //   userRecord.toJSON()
-      // );
       let users = listUsersResult.users;
 
       if (listUsersResult.pageToken) {
