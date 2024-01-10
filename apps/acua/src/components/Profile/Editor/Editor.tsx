@@ -3,11 +3,6 @@ import {
   Button,
   ButtonGroup,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Divider,
   Paper,
   TextField,
@@ -19,17 +14,22 @@ import { updateProfile } from 'firebase/auth';
 import { useAuth } from '../../../util/AuthProvider';
 import { ILocation } from '../../../interfaces/location.interface';
 import locationService from '../../../services/location.service';
+import { useSnackbar } from '../../../util/SnackbarContext';
+import userService from '../../../services/user.service';
+import { useDialog } from '../../../util/DialogContext';
 
 /* eslint-disable-next-line */
 export interface EditorProps {}
 
 export function Editor(props: EditorProps) {
-  const { currentUser, getUser } = useAuth();
+  const { currentUser, getUser, signOut } = useAuth();
 
   const [displayName, setDisplayName] = React.useState('');
   const [location, setLocation] = React.useState<ILocation | null>(null); // [location, setLocation
   const [locationName, setLocationName] = React.useState('');
-  const [open, setOpen] = React.useState(false);
+
+  const showSnackbar = useSnackbar();
+  const showDialog = useDialog();
 
   const navigate = useNavigate();
 
@@ -44,11 +44,67 @@ export function Editor(props: EditorProps) {
     }
   }, [currentUser]);
 
-  const handleClose = (confirm: boolean) => {
-    if (confirm) {
-      navigate(-1);
-    }
-    setOpen(false);
+  const handleCancelButton = () => {
+    showDialog({
+      title: 'Are you sure you want to cancel and go back?',
+      content: 'All changes will be lost.',
+      buttons: [
+        {
+          id: 'cancel',
+          text: 'No',
+        },
+        {
+          id: 'confirm',
+          text: 'Yes',
+          color: 'error',
+          callback: () => navigate(-1),
+        },
+      ],
+    });
+  };
+
+  const handleDeleteButton = () => {
+    showDialog({
+      title: 'Are you sure you want to delete your account?',
+      content: [
+        'Your personal data will be permanently deleted and repair requests will be anonymised.',
+        'This action cannot be undone.',
+      ],
+      buttons: [
+        {
+          id: 'cancel',
+          text: 'No, take me back',
+        },
+        {
+          id: 'confirm',
+          text: 'Yes, delete my account',
+          color: 'error',
+          callback: () => RequestDeletion(),
+        },
+      ],
+    });
+  };
+
+  const RequestDeletion = () => {
+    userService
+      .requestAccountDeletion()
+      .then(() => {
+        // Delete data
+        showSnackbar({
+          message: 'Account deletion requested.',
+          severity: 'success',
+          duration: 5000,
+        });
+        signOut();
+        navigate('/');
+      })
+      .catch(() => {
+        showSnackbar({
+          message: 'Something went wrong. Please try again later.',
+          severity: 'error',
+          duration: 5000,
+        });
+      });
   };
 
   const handleSave = async () => {
@@ -68,10 +124,20 @@ export function Editor(props: EditorProps) {
 
         // Update user data
         await updateProfile(currentUser, { displayName }).then(() => {
+          showSnackbar({
+            message: 'Profile updated',
+            severity: 'success',
+            duration: 5000,
+          });
           navigate('/');
         });
         getUser();
       } catch (error) {
+        showSnackbar({
+          message: 'Something went wrong. Please try again later.',
+          severity: 'error',
+          duration: 5000,
+        });
         console.error(error);
         // Handle the error appropriately here
       }
@@ -115,44 +181,21 @@ export function Editor(props: EditorProps) {
               display: 'flex',
               flexDirection: 'row',
               alignContent: 'center',
+              justifyContent: 'space-between',
             }}
           >
             <ButtonGroup variant="contained">
               <Button color="primary" onClick={() => handleSave()}>
                 Save
               </Button>
-              <Button color="error" onClick={() => setOpen(true)}>
+              <Button color="error" onClick={() => handleCancelButton()}>
                 Cancel
               </Button>
             </ButtonGroup>
+            <Button color="error" onClick={() => handleDeleteButton()}>
+              Delete my account
+            </Button>
           </Box>
-          <Dialog
-            open={open}
-            onClose={() => handleClose(false)}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              Are you sure you want to cancel and go back?
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                All changes will be lost.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => handleClose(false)} color="primary">
-                No
-              </Button>
-              <Button
-                onClick={() => handleClose(true)}
-                color="primary"
-                autoFocus
-              >
-                Yes
-              </Button>
-            </DialogActions>
-          </Dialog>
         </>
       );
     }

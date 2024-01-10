@@ -8,5 +8,10 @@
     "target": "http://localhost:3200",
     "secure": false,
     "changeOrigin": true
+  },
+  "/api/user": {
+    "target": "http://localhost:3300",
+    "secure": false,
+    "changeOrigin": true
   }
 }

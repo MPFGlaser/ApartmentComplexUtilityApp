@@ -5,6 +5,3 @@ DATABASE_PORT=5443
 DATABASE_USER=ticketdb
 DATABASE_PASSWORD=ticketdb
 DATABASE_NAME=ticketdb
-
-# JSON.stringify'd version of the Firebase Admin SDK config object, only for local development
-FIREBASE_CONFIG=

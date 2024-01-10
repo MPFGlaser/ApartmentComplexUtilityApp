@@ -28,6 +28,9 @@ export function convertErrorToMessage(error: unknown) {
       case 'auth/wrong-password':
         errorMessage = 'Incorrect password.';
         break;
+      case 'auth/missing-password':
+        errorMessage = 'Password is required.';
+        break;
       case 'auth/invalid-credential':
         errorMessage = 'Email or password is incorrect.';
         break;

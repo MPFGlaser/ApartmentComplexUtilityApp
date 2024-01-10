@@ -51,6 +51,16 @@ class TicketService {
     const deleteTicket = await Ticket.destroy({ where: { id } });
     return deleteTicket;
   }
+
+  public async anonymiseTicketByCreator(creatorId: string) {
+    const anonymiseTicket = await Ticket.update(
+      {
+        creator: 'anonymous',
+      },
+      { where: { creator: creatorId } }
+    );
+    return anonymiseTicket;
+  }
 }
 
 export default new TicketService();

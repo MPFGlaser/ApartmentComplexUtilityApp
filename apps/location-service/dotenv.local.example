@@ -5,6 +5,3 @@ DATABASE_PORT=5433
 DATABASE_USER=locationdb
 DATABASE_PASSWORD=locationdb
 DATABASE_NAME=locationdb
-
-# JSON.stringify'd version of the Firebase Admin SDK config object, only for local development
-FIREBASE_CONFIG=

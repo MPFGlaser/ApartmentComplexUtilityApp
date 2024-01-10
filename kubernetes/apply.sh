@@ -9,3 +9,4 @@ kubectl apply -f ./namespace.yaml \
 -f ./acua.yaml \
 -f ./location-service.yaml \
 -f ./ticket-service.yaml \
+-f ./user-service.yaml \

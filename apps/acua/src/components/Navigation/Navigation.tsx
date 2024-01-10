@@ -22,6 +22,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import { navRoutes } from '../../routes/routes';
 import { useAuth } from '../../util/AuthProvider';
+import { useSnackbar } from '../../util/SnackbarContext';
 
 const drawerWidth = 240;
 
@@ -33,6 +34,8 @@ export default function Navigation(props: Readonly<NavigationProps>) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const { currentUser, signOut } = useAuth();
+
+  const showSnackbar = useSnackbar();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -91,6 +94,10 @@ export default function Navigation(props: Readonly<NavigationProps>) {
               onClick={(e) => {
                 handleDrawerToggle();
                 handleSignout();
+                showSnackbar({
+                  message: 'Successfully signed out',
+                  severity: 'success',
+                });
               }}
             >
               <LogoutIcon />

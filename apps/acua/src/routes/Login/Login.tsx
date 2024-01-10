@@ -1,30 +1,21 @@
 import {
-  Alert as MuiAlert,
-  AlertProps,
   Box,
   Button,
   FormControl,
   Grid,
   Paper,
-  Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
-import React, { MouseEvent, useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { convertErrorToMessage } from '../../util/ErrorHandler';
 import { useAuth } from '../../util/AuthProvider';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useSnackbar } from '../../util/SnackbarContext';
 
 /* eslint-disable-next-line */
 export interface LoginProps {}
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 export function Login(props: LoginProps) {
   const navigate = useNavigate();
@@ -33,20 +24,7 @@ export function Login(props: LoginProps) {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
 
-  const [snackbarVisiblity, setSnackbarVisiblity] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-
-  const handleSnackbarClose = (
-    _event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setSnackbarVisiblity(false);
-    setSnackbarMessage('');
-  };
+  const showSnackbar = useSnackbar();
 
   async function handleLogin(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -54,10 +32,19 @@ export function Login(props: LoginProps) {
     try {
       setLoading(true);
       await login(email, password);
+      showSnackbar({
+        message: 'Login successful',
+        severity: 'success',
+        isAlert: true,
+      });
       navigate('/edit-profile');
     } catch (error: unknown) {
-      setSnackbarMessage(convertErrorToMessage(error));
-      setSnackbarVisiblity(true);
+      setLoading(false);
+      showSnackbar({
+        message: convertErrorToMessage(error),
+        severity: 'error',
+        isAlert: true,
+      });
     }
   }
 
@@ -146,19 +133,6 @@ export function Login(props: LoginProps) {
           </Box>
         </Paper>
       </Grid>
-      <Snackbar
-        open={snackbarVisiblity}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity="error"
-          sx={{ width: '100%' }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
     </Grid>
   );
 }
