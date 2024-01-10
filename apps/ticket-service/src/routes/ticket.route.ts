@@ -5,10 +5,10 @@ import {
   getTicketSchema,
   updateTicketSchema,
   updateTicketStatusSchema,
-  deleteTicketSchema,
 } from '../validators/ticket.validator';
 import TicketService from '../services/ticket.service';
 import { ITicket } from '../interfaces/ticket.interface';
+import { UserClaim } from '../../../user-service/src/enums/UserClaim.enum';
 
 const router = Router();
 
@@ -133,23 +133,24 @@ router.put(
   }
 );
 
-router.delete('/:id', ...validate(deleteTicketSchema), async (req, res) => {
-  try {
-    const TicketToDelete = await TicketService.getTicketById(req.params.id);
+router.delete(
+  '/:id',
+  authenticated([UserClaim.Admin, UserClaim.Manager]),
+  async (req, res) => {
+    try {
+      const TicketToDelete = await TicketService.getTicketById(req.params.id);
 
-    if (!TicketToDelete)
-      return res.status(404).send({ message: 'Ticket not found' });
+      if (!TicketToDelete)
+        return res.status(404).send({ message: 'Ticket not found' });
 
-    if (TicketToDelete.creator !== req.body.uid)
-      return res.status(401).send({ message: 'Unauthorized' });
+      await TicketService.deleteTicket(req.params.id);
 
-    const result = await TicketService.deleteTicket(req.params.id);
-
-    return res.send(result);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send({ message: 'Internal server error' });
+      return res.status(200).send({ message: 'Ticket deleted' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({ message: 'Internal server error' });
+    }
   }
-});
+);
 
 export default router;

@@ -63,16 +63,3 @@ export const updateTicketStatusSchema = checkSchema({
     },
   },
 });
-
-export const deleteTicketSchema = checkSchema({
-  id: {
-    exists: {
-      errorMessage: 'Ticket ID is required',
-    },
-    isIn: {
-      options: [['open', 'pending', 'inprogress', 'completed', 'wontfix']],
-      errorMessage:
-        'Status should be one of open, pending, inprogress, completed, wontfix',
-    },
-  },
-});
