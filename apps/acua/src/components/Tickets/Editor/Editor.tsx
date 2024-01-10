@@ -31,8 +31,20 @@ export function Editor(props: EditorProps) {
 
   useEffect(() => {
     const fetchLocation = async () => {
-      const data = await locationService.getOwnLocation();
-      setLocation(data);
+      locationService
+        .getOwnLocation()
+        .then((locationData) => {
+          setLocation(locationData);
+        })
+        .catch(() => {
+          showSnackbar({
+            message:
+              'You must have a location set on your profile to create a ticket!',
+            severity: 'error',
+            duration: 10000,
+          });
+          navigate('/edit-profile');
+        });
     };
 
     fetchLocation();
