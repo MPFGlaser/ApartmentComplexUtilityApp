@@ -159,7 +159,7 @@ npx nx serve $app-name
 Example:
 
 ```sh
-npx nx serve auth-service
+npx nx serve ticket-service
 ```
 
 To run multiple apps at once, use:
