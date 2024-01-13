@@ -8,6 +8,6 @@ describe('acua', () => {
     cy.login('my-email@something.com', 'myPassword');
 
     // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains('Welcome acua');
+    getGreeting().contains('Welcome to the Apartment Complex Utility App');
   });
 });
