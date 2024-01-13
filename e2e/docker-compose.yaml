@@ -1,0 +1,41 @@
+version: '3.1'
+name: acua-dev
+services:
+  locationdb:
+    image: locationdb-e2e
+    restart: always
+    environment:
+      POSTGRES_USER: locationdb
+      POSTGRES_PASSWORD: locationdb
+      POSTGRES_DB: locationdb
+    ports:
+      - 5433:5432
+    volumes:
+      - locationdb-e2e-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+  ticketdb:
+    image: ticketdb-e2e
+    restart: always
+    environment:
+      POSTGRES_USER: ticketdb
+      POSTGRES_PASSWORD: ticketdb
+      POSTGRES_DB: ticketdb
+    ports:
+      - 5443:5432
+    volumes:
+      - ticketdb-e2e-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  locationdb-e2e-data:
+  ticketdb-e2e-data:
