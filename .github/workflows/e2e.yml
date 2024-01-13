@@ -1,0 +1,23 @@
+name: e2e
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: 'Download Node Dependencies'
+        run: npm ci
+      - name: 'Build pre-seeded database images'
+        run: |
+          docker build -t locationdb-e2e -f ./e2e/database-seeding/locationdb/Dockerfile .
+          docker build -t ticketdb-e2e -f ./e2e/database-seeding/ticketdb/Dockerfile .
+      - name: 'Show Docker images'
+        run: docker images
