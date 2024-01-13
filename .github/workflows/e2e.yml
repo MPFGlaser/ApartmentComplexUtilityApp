@@ -36,7 +36,7 @@ jobs:
           docker-compose -p acua-e2e -f ./e2e/docker-compose.yaml up -d
       - name: 'Start ACUA microservices stack'
         run: |
-          nx run-many --target=serve --maxParallel=100 --exclude acua
+          npx nx run-many --target=serve --maxParallel=100 --exclude acua
       - name: 'Run Firebase Emulator and e2e tests on ACUA frontend'
         run: |
-          firebase emulators:exec --import=./e2e/firebase-emulator-data --only firestore 'nx e2e acua-e2e'
+          firebase emulators:exec --import=./e2e/firebase-emulator-data --only firestore 'npx nx e2e acua-e2e'
