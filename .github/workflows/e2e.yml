@@ -13,8 +13,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: 'Download Node Dependencies'
-        run: npm ci
+      # - name: 'Download Node Dependencies'
+      #   run: npm ci
       - name: 'Build pre-seeded database images'
         run: |
           docker build -t locationdb-e2e -f ./e2e/database-seeding/locationdb/Dockerfile .
