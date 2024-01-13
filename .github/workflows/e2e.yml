@@ -17,7 +17,7 @@ jobs:
       #   run: npm ci
       - name: 'Build pre-seeded database images'
         run: |
-          docker build -t locationdb-e2e -f ./e2e/database-seeding/locationdb/Dockerfile .
-          docker build -t ticketdb-e2e -f ./e2e/database-seeding/ticketdb/Dockerfile .
+          docker build -t locationdb-e2e -f ./e2e/database-seeding/locationdb/Dockerfile ./e2e/database-seeding/locationdb
+          docker build -t ticketdb-e2e -f ./e2e/database-seeding/ticketdb/Dockerfile ./e2e/database-seeding/ticketdb
       - name: 'Show Docker images'
         run: docker images
