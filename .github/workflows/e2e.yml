@@ -33,7 +33,7 @@ jobs:
           docker build -t ticketdb-e2e -f ./e2e/database-seeding/ticketdb/Dockerfile ./e2e/database-seeding/ticketdb
       - name: 'Start Docker Compose'
         run: |
-          docker-compose -f ./e2e/docker-compose.yml up -d
+          docker-compose -f ./e2e/docker-compose.yaml up -d
       - name: 'Start ACUA microservices stack'
         run: |
           nx run-many --target=serve --maxParallel=100 --exclude acua
