@@ -1,4 +1,4 @@
-FROM postgres:latest
+FROM postgres:16-alpine
 
 RUN addgroup -S nonroot \
   && adduser -S nonroot -G nonroot
