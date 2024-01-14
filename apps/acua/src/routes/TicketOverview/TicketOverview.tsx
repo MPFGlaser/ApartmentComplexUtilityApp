@@ -22,7 +22,7 @@ export function TicketOverview(props: TicketOverviewProps) {
       })
       .catch((error) => {
         showSnackbar({
-          message: error.message,
+          message: 'Error fetching tickets',
           severity: 'error',
         });
       });
