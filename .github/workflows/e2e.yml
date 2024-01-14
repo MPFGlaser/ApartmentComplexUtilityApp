@@ -56,7 +56,6 @@ jobs:
       - name: 'Start Docker Compose'
         run: |
           docker compose -f ./e2e/docker-compose.yaml up --detach
-          sleep 10
       - name: Wait for Containers to be Healthy
         run: |
           # Retry for a certain period until both containers are healthy
