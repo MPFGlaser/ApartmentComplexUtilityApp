@@ -43,8 +43,25 @@ jobs:
       - name: 'Start Docker Compose'
         run: |
           docker compose -f ./e2e/docker-compose.yaml up --detach
-      - name: 'Wait for Containers to be Healthy'
-        run: docker-compose ps --quiet --filter "health=healthy" --timeout 180s
+          sleep 10
+      - name: Wait for Containers to be Healthy
+        run: |
+          # Retry for a certain period until both containers are healthy
+          for i in {1..30}; do
+            locationdb_health=$(docker compose ps --quiet --filter "health=healthy" locationdb)
+            ticketdb_health=$(docker compose ps --quiet --filter "health=healthy" ticketdb)
+
+            if [ -n "$locationdb_health" ] && [ -n "$ticketdb_health" ]; then
+              break
+            fi
+
+            sleep 10
+          done
+
+          # Fail the workflow if both containers are not healthy after retries
+          if [ -z "$locationdb_health" ] || [ -z "$ticketdb_health" ]; then
+            exit 1
+          fi
       - name: 'Start ACUA microservices stack'
         run: |
           npx nx run-many --target=serve --maxParallel=100 --exclude acua &
