@@ -42,7 +42,9 @@ jobs:
           docker build -t ticketdb-e2e -f ./e2e/database-seeding/ticketdb/Dockerfile ./e2e/database-seeding/ticketdb
       - name: 'Start Docker Compose'
         run: |
-          docker compose -f ./e2e/docker-compose.yaml up --wait
+          docker compose -f ./e2e/docker-compose.yaml up --detach
+      - name: 'Wait for Containers to be Healthy'
+        run: docker-compose ps --quiet --filter "health=healthy" --timeout 180s
       - name: 'Start ACUA microservices stack'
         run: |
           npx nx run-many --target=serve --maxParallel=100 --exclude acua &
