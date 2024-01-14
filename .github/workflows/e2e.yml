@@ -70,6 +70,7 @@ jobs:
           firebase emulators:exec --import=./e2e/firebase-emulator-data 'npx nx e2e acua-e2e'
       - name: 'Upload screenshots'
         uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: cypress-screenshots
           path: dist/cypress/apps/acua-e2e/screenshots
