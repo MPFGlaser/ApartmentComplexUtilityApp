@@ -32,6 +32,13 @@ jobs:
         with:
           path: ~/.cache/firebase/emulators
           key: ${{ runner.os }}-firebase-emulators-${{ hashFiles('~/.cache/firebase/emulators/**') }}
+      - name: 'Cache Playwright browsers'
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/ms-playwright/
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
       - name: 'Download Node Dependencies'
         run: npm ci
       - name: 'Download Firebase CLI'
