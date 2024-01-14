@@ -48,8 +48,8 @@ jobs:
         run: |
           # Retry for a certain period until both containers are healthy
           for i in {1..30}; do
-            locationdb_health=$(docker compose ps --quiet --filter "health=healthy" locationdb)
-            ticketdb_health=$(docker compose ps --quiet --filter "health=healthy" ticketdb)
+            locationdb_health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json locationdb | grep -q '"Health":"healthy"' && echo true || echo false)
+            ticketdb_health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json ticketdb | grep -q '"Health":"healthy"' && echo true || echo false)
 
             if [ -n "$locationdb_health" ] && [ -n "$ticketdb_health" ]; then
               break
