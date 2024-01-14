@@ -49,14 +49,15 @@ class UserService {
 
     if (!targetUser) throw new Error('User not found');
 
-    const currentClaims = targetUser.customClaims || {};
+    const currentClaims = targetUser.customClaims?.claims || [];
 
-    const newClaims = {
-      ...currentClaims,
-      ...claimsToGrant.reduce((acc, claim) => ({ ...acc, [claim]: true }), {}),
+    const uniqueClaims = [...new Set([...currentClaims, ...claimsToGrant])];
+
+    const claimsToSet = {
+      claims: uniqueClaims,
     };
 
-    await auth.setCustomUserClaims(target, newClaims);
+    await auth.setCustomUserClaims(target, claimsToSet);
   }
 
   public async revokeClaims(
@@ -68,13 +69,14 @@ class UserService {
     if (!targetUser) throw new Error('User not found');
 
     if (claimsToRevoke.includes('*')) {
-      await auth.setCustomUserClaims(target, null);
+      await auth.setCustomUserClaims(target, { claims: [] });
     } else {
-      const userClaims = targetUser.customClaims || {};
-      claimsToRevoke.forEach((claim: string) => {
-        delete userClaims[claim];
-      });
-      await auth.setCustomUserClaims(target, userClaims);
+      const currentClaims = targetUser.customClaims?.claims || [];
+      const updatedClaims = currentClaims.filter(
+        (claim: UserClaim) => !claimsToRevoke.includes(claim)
+      );
+
+      await auth.setCustomUserClaims(target, { claims: updatedClaims });
     }
   }
 

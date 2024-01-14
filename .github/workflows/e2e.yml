@@ -1,0 +1,76 @@
+name: e2e
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      VITE_API_URL: 'https://acua.mpfglaser.nl/api'
+      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+      VITE_FIREBASE_PROJECT_ID: ${{ vars.VITE_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_STORAGE_BUCKET: ${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+      VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 'Setup Node dependency cache'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: 'Setup Firebase Emulator cache'
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/firebase/emulators
+          key: ${{ runner.os }}-firebase-emulators-${{ hashFiles('~/.cache/firebase/emulators/**') }}
+      - name: 'Download Node Dependencies'
+        run: npm ci
+      - name: 'Download Firebase CLI'
+        run: npm install -g firebase-tools
+      - name: 'Build pre-seeded database images'
+        run: |
+          docker build -t locationdb-e2e -f ./e2e/database-seeding/locationdb/Dockerfile ./e2e/database-seeding/locationdb
+          docker build -t ticketdb-e2e -f ./e2e/database-seeding/ticketdb/Dockerfile ./e2e/database-seeding/ticketdb
+      - name: 'Start Docker Compose'
+        run: |
+          docker compose -f ./e2e/docker-compose.yaml up --detach
+          sleep 10
+      - name: Wait for Containers to be Healthy
+        run: |
+          # Retry for a certain period until both containers are healthy
+          for i in {1..30}; do
+            locationdb_health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json locationdb | grep -q '"Health":"healthy"' && echo true || echo false)
+            ticketdb_health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json ticketdb | grep -q '"Health":"healthy"' && echo true || echo false)
+
+            if [ -n "$locationdb_health" ] && [ -n "$ticketdb_health" ]; then
+              break
+            fi
+
+            sleep 10
+          done
+
+          # Fail the workflow if both containers are not healthy after retries
+          if [ -z "$locationdb_health" ] || [ -z "$ticketdb_health" ]; then
+            exit 1
+          fi
+      - name: 'Start ACUA microservices stack'
+        run: |
+          npx nx run-many --target=serve --maxParallel=100 --exclude acua &
+      - name: 'Run Firebase Emulator and e2e tests on ACUA frontend'
+        run: |
+          firebase emulators:exec --import=./e2e/firebase-emulator-data 'npx nx e2e acua-e2e'
+      - name: 'Upload screenshots'
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-screenshots
+          path: dist/cypress/apps/acua-e2e/screenshots

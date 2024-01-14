@@ -1,8 +1,12 @@
 import { Message, PubSub } from '@google-cloud/pubsub';
 import { MessageTopic } from './topics.enum';
 
-const projectId =
-  process.env['NODE_ENV'] === 'production' ? 'mpfg-acua' : 'mpfg-acua-dev';
+let projectId = 'mpfg-acua';
+
+if (process.env['NODE_ENV'] !== 'production') {
+  process.env['PUBSUB_EMULATOR_HOST'] = 'localhost:8085';
+  projectId = 'mpfg-acua-dev';
+}
 
 const pubsub = new PubSub({ projectId });
 
