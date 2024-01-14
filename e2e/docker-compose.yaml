@@ -6,7 +6,6 @@ services:
     environment:
       POSTGRES_USER: locationdb
       POSTGRES_PASSWORD: locationdb
-      POSTGRES_DB: locationdb
     ports:
       - 5433:5432
     volumes:
@@ -23,7 +22,6 @@ services:
     environment:
       POSTGRES_USER: ticketdb
       POSTGRES_PASSWORD: ticketdb
-      POSTGRES_DB: ticketdb
     ports:
       - 5443:5432
     volumes:

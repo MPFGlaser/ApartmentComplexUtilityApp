@@ -5,30 +5,7 @@
 -- Dumped from database version 15.4 (Debian 15.4-1.pgdg120+1)
 -- Dumped by pg_dump version 15.3
 
--- Started on 2024-01-13 15:37:16 CET
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
---
--- TOC entry 3347 (class 1262 OID 16384)
--- Name: locationdb; Type: DATABASE; Schema: -; Owner: locationdb
---
-
-CREATE DATABASE locationdb WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8';
-
-
-ALTER DATABASE locationdb OWNER TO locationdb;
-
-\connect locationdb
+-- Started on 2024-01-14 21:49:07 CET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -63,7 +40,7 @@ CREATE TABLE public."Locations" (
 ALTER TABLE public."Locations" OWNER TO locationdb;
 
 --
--- TOC entry 3341 (class 0 OID 16385)
+-- TOC entry 3342 (class 0 OID 16385)
 -- Dependencies: 214
 -- Data for Name: Locations; Type: TABLE DATA; Schema: public; Owner: locationdb
 --
@@ -74,7 +51,7 @@ INSERT INTO public."Locations" (id, owner, name, "createdAt", "updatedAt", "dele
 
 
 --
--- TOC entry 3198 (class 2606 OID 16391)
+-- TOC entry 3199 (class 2606 OID 16391)
 -- Name: Locations Locations_pkey; Type: CONSTRAINT; Schema: public; Owner: locationdb
 --
 
@@ -82,7 +59,7 @@ ALTER TABLE ONLY public."Locations"
     ADD CONSTRAINT "Locations_pkey" PRIMARY KEY (id);
 
 
--- Completed on 2024-01-13 15:37:16 CET
+-- Completed on 2024-01-14 21:49:08 CET
 
 --
 -- PostgreSQL database dump complete
