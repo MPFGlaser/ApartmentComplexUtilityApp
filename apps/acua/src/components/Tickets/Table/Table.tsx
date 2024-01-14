@@ -73,6 +73,7 @@ function Table({ tickets }: Readonly<{ tickets: ITicket[] }>) {
         localeText={{ noRowsLabel: 'No tickets found.' }}
         sortModel={sortModel}
         onSortModelChange={(model) => setSortModel(model)}
+        data-testid="ticket-table"
       />
     </div>
   );

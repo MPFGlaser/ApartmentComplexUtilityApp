@@ -12,7 +12,13 @@ import Signup from './Signup/Signup';
 import { ProtectedRoute } from '../util/ProtectedRoute';
 
 export const navRoutes = [
-  { path: '/', element: <Landing />, name: 'Home', icon: <HomeIcon /> },
+  {
+    path: '/',
+    element: <Landing />,
+    name: 'Home',
+    icon: <HomeIcon />,
+    testid: 'navigation-home-button',
+  },
   {
     path: '/tickets',
     element: (
@@ -22,6 +28,7 @@ export const navRoutes = [
     ),
     name: 'Repair Requests',
     icon: <HandymanIcon />,
+    testid: 'navigation-tickets-button',
   },
 ];
 

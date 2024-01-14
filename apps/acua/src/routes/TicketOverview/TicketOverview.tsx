@@ -27,7 +27,7 @@ export function TicketOverview(props: TicketOverviewProps) {
       <Box
         sx={{ display: 'flex', flexDirection: 'row', alignContent: 'center' }}
       >
-        <Typography variant="h5" sx={{ my: 1 }}>
+        <Typography component="h1" variant="h5" sx={{ my: 1 }}>
           Repair Requests
         </Typography>
         <Button
@@ -36,6 +36,7 @@ export function TicketOverview(props: TicketOverviewProps) {
           sx={{ my: 1, ml: 'auto' }}
           component={Link}
           to="/tickets/create"
+          data-testid="create-ticket-button"
         >
           New
         </Button>

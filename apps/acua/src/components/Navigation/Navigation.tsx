@@ -128,6 +128,7 @@ export default function Navigation(props: Readonly<NavigationProps>) {
             to={item.path}
             style={{ textDecoration: 'none', color: 'inherit' }}
             onClick={handleDrawerToggle}
+            data-testid={item.testid}
           >
             <ListItemButton>
               <ListItemIcon>{item.icon}</ListItemIcon>
