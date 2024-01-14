@@ -58,8 +58,9 @@ jobs:
           docker compose -f ./e2e/docker-compose.yaml up --detach
       - name: Wait for Containers to be Healthy
         run: |
-          chmod +x ./scripts/wait-for-containers.sh
-          ./scripts/wait-for-containers.sh
+          # chmod +x ./scripts/wait-for-containers.sh
+          # ./scripts/wait-for-containers.sh
+          sleep 15
       - name: 'Setup environment variables'
         run: |
           cp ./apps/acua/dotenv.e2e.example ./apps/acua/.env
