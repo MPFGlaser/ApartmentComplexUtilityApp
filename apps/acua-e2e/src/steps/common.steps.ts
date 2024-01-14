@@ -8,6 +8,61 @@ When(/^.* user visits the home page$/, async function (this: PlaywrightWorld) {
   await this.visit('/');
 });
 
+When(
+  'the user is logged in as a(n) {word}',
+  async function (this: PlaywrightWorld, role: string) {
+    let expectedDisplayName: string;
+    let email: string;
+    const password = 'password';
+
+    switch (role) {
+      case 'admin':
+        email = 'admin@mpfglaser.nl';
+        break;
+      case 'tenant':
+        email = 'tenant@mpfglaser.nl';
+        break;
+      case 'user to delete':
+        email = 'deleteme@mpfglaser.nl';
+        break;
+      default:
+        throw new Error(`Unknown role: ${role}`);
+    }
+
+    switch (role) {
+      case 'admin':
+        expectedDisplayName = 'Admin';
+        break;
+      case 'tenant':
+        expectedDisplayName = 'Tenant';
+        break;
+      case 'user to delete':
+        expectedDisplayName = 'Delete me';
+        break;
+      default:
+        throw new Error(`Unknown role: ${role}`);
+    }
+
+    await this.visit('/login');
+
+    const emailInput = this.page.getByRole('textbox', { name: 'Email' });
+    const passwordInput = this.page.getByRole('textbox', { name: 'Password' });
+
+    await emailInput.fill(email);
+    await passwordInput.fill(password);
+
+    const loginButton = this.page.getByTestId('login-button');
+
+    await loginButton.click();
+
+    const displayName = this.page.getByTestId('navigation-display-name').nth(0);
+
+    this.setScreenshotOptions({ mask: [displayName], maskColor }); // highlight display name
+
+    await expect(displayName).toContainText(expectedDisplayName);
+  }
+);
+
 Then(
   'the user is shown a toast with the message {string}',
   async function (this: PlaywrightWorld, message: string) {
