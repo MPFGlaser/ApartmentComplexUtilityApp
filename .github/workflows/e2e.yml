@@ -68,3 +68,8 @@ jobs:
       - name: 'Run Firebase Emulator and e2e tests on ACUA frontend'
         run: |
           firebase emulators:exec --import=./e2e/firebase-emulator-data 'npx nx e2e acua-e2e'
+      - name: 'Upload screenshots'
+        uses: actions/upload-artifact@v2
+        with:
+          name: cypress-screenshots
+          path: dist/cypress/apps/acua-e2e/screenshots
