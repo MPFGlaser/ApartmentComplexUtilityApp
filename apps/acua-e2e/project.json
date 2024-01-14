@@ -16,7 +16,7 @@
         "testRunner": "playwright",
         "baseUrl": "http://localhost:4200",
         "devServerTarget": "acua:serve",
-        "disableVideoFiles": true,
+        "disableVideoFiles": false,
         "disableVideoAttachments": true,
         "additionalPlaywrightConfiguration": {
           "acceptDownloads": true
