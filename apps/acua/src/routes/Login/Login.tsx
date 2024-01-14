@@ -110,6 +110,7 @@ export function Login(props: LoginProps) {
                 id="signin-button"
                 variant="contained"
                 onClick={(e) => handleLogin(e)}
+                data-testid="login-button"
               >
                 Sign in
               </Button>
@@ -127,6 +128,7 @@ export function Login(props: LoginProps) {
               variant="outlined"
               component={Link}
               to="/signup"
+              data-testid="signup-button"
             >
               Sign up
             </Button>
