@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import ticketService from '../../services/ticket.service';
 import { ITicket } from '../../interfaces/ticket.interface';
+import { useSnackbar } from '../../util/SnackbarContext';
 
 /* eslint-disable-next-line */
 export interface TicketOverviewProps {}
 
 export function TicketOverview(props: TicketOverviewProps) {
   const [tickets, setTickets] = useState<ITicket[]>([]);
+
+  const showSnackbar = useSnackbar();
 
   useEffect(() => {
     ticketService
@@ -18,9 +21,12 @@ export function TicketOverview(props: TicketOverviewProps) {
         setTickets(response);
       })
       .catch((error) => {
-        console.error('Error fetching tickets', error);
+        showSnackbar({
+          message: error.message,
+          severity: 'error',
+        });
       });
-  }, []);
+  }, [showSnackbar]);
 
   return (
     <Container>
