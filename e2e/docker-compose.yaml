@@ -6,12 +6,11 @@ services:
     environment:
       POSTGRES_USER: locationdb
       POSTGRES_PASSWORD: locationdb
+      DB_TO_CHECK: locationdb
     ports:
       - 5433:5432
-    volumes:
-      - locationdb-e2e-data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$DB_TO_CHECK']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -22,17 +21,12 @@ services:
     environment:
       POSTGRES_USER: ticketdb
       POSTGRES_PASSWORD: ticketdb
+      DB_TO_CHECK: ticketdb
     ports:
       - 5443:5432
-    volumes:
-      - ticketdb-e2e-data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$DB_TO_CHECK']
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 30s
-
-volumes:
-  locationdb-e2e-data:
-  ticketdb-e2e-data:

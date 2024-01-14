@@ -1,15 +1,35 @@
-for i in {1..30}; do
-  locationdb_health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json locationdb | grep -q '"Health":"healthy"' && echo true || echo false)
-  ticketdb_health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json ticketdb | grep -q '"Health":"healthy"' && echo true || echo false)
+#!/bin/bash
 
-  if [ "$locationdb_health" = "true" ] && [ "$ticketdb_health" = "true" ]; then
-    break
+check_docker_health() {
+  local name=$1
+  # local health=$(docker inspect --format='{{.State.Health.Status}}' $name)
+  local health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json $name | grep -q '"Health":"healthy"' && echo true || echo false)
+
+  if [[ $health == 'true' ]]; then
+    return 0
+  else
+    return 1
   fi
+}
 
-  sleep 10
-done
+wait_for_docker() {
+  local name=$1
+  local retry_seconds=5
+  local max_retries=60
 
-# Fail the workflow if both containers are not healthy after retries
-if [ "$locationdb_health" != "true" ] || [ "$ticketdb_health" != "true" ]; then
-  exit 1
-fi
+  for ((i=1;i<=max_retries;i++)); do
+    if check_docker_health $name; then
+      echo "$name is healthy"
+      return 0
+    else
+      echo "Waiting for $name to be healthy ($i/$max_retries)"
+      sleep $retry_seconds
+    fi
+  done
+
+  echo "Failed to wait for $name to be healthy"
+  return 1
+}
+
+wait_for_docker locationdb
+wait_for_docker ticketdb
