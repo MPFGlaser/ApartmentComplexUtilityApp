@@ -43,6 +43,10 @@ jobs:
       - name: 'Start Docker Compose'
         run: |
           docker compose -f ./e2e/docker-compose.yaml up --wait --detach
+      - name: 'Print Docker logs'
+        run: |
+          docker logs locationdb-e2e
+          docker logs ticketdb-e2e
       - name: 'Start ACUA microservices stack'
         run: |
           npx nx run-many --target=serve --maxParallel=100 --exclude acua &
