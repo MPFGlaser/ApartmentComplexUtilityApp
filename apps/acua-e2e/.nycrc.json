@@ -1,0 +1,8 @@
+{
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "all": true,
+  "check-coverage": false,
+  "include": ["apps", "libs", "packages"],
+  "reportDir": "dist/coverage/apps/acua-e2e",
+  "reporter": ["clover", "cobertura", "json", "lcov", "text"]
+}
