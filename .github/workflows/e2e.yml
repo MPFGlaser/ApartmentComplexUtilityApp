@@ -68,7 +68,7 @@ jobs:
           cp ./apps/user-service/dotenv.e2e.example ./apps/user-service/.env
       - name: 'Run Firebase Emulator and e2e tests on ACUA frontend'
         run: |
-          firebase emulators:exec --import=./e2e/firebase-emulator-data 'npx nx run-many --target=serve --maxParallel=100 --exclude acua & sleep 10 && npx nx e2e acua-e2e'
+          firebase emulators:exec --import=./e2e/firebase-emulator-data 'npx nx run-many --target=serve --all --exclude=acua & npx nx e2e acua-e2e'
       - name: 'Upload report'
         uses: actions/upload-artifact@v2
         if: always()
