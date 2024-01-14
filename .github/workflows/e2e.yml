@@ -58,22 +58,8 @@ jobs:
           docker compose -f ./e2e/docker-compose.yaml up --detach
       - name: Wait for Containers to be Healthy
         run: |
-          # Retry for a certain period until both containers are healthy
-          for i in {1..30}; do
-            locationdb_health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json locationdb | grep -q '"Health":"healthy"' && echo true || echo false)
-            ticketdb_health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json ticketdb | grep -q '"Health":"healthy"' && echo true || echo false)
-
-            if [ "$locationdb_health" ] && [ "$ticketdb_health" ]; then
-              break
-            fi
-
-            sleep 10
-          done
-
-          # Fail the workflow if both containers are not healthy after retries
-          if [ -z "$locationdb_health" ] || [ -z "$ticketdb_health" ]; then
-            exit 1
-          fi
+          chmod +x ./scripts/wait-for-containers.sh
+          ./scripts/wait-for-containers.sh
       - name: 'Start ACUA microservices stack'
         run: |
           npx nx run-many --target=serve --maxParallel=100 --exclude acua &
