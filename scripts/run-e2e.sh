@@ -16,3 +16,6 @@ pkill -f "run-many --target=serve --all --exclude=acua" || true
 
 # Wait until all instances of the command are killed
 while pgrep -f "npx nx run-many --target=serve --all --exclude=acua" > /dev/null; do sleep 1; done
+kill -9 $(lsof -t -i:3100) || true
+kill -9 $(lsof -t -i:3200) || true
+kill -9 $(lsof -t -i:3300) || true

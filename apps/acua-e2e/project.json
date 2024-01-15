@@ -24,8 +24,7 @@
         "reportOptions": {
           "reports": ["html-built-in", "html-beautiful"]
         }
-      },
-      "dependsOn": ["^build"]
+      }
     },
     "e2e-watch": {
       "executor": "nx:run-commands",
