@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: acua
-        image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/acua:0.6.1
+        image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/acua:0.6.2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

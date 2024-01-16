@@ -21,7 +21,7 @@ spec:
       serviceAccountName: acua-ksa
       containers:
       - name: user-service
-        image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/user-service:0.1.1
+        image: ghcr.io/mpfglaser/apartmentcomplexutilityapp/user-service:0.1.2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
