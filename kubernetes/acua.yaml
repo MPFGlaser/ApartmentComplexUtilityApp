@@ -53,3 +53,19 @@ spec:
       targetPort: 8080
   selector:
     app: acua
+
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: acua
+  namespace: acua
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: acua
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
