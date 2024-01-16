@@ -138,7 +138,9 @@ export function Detail(props: DetailProps) {
             p: 2,
           }}
         >
-          <Typography variant="h4">{ticket?.title}</Typography>
+          <Typography variant="h4" data-testid="ticket-title">
+            {ticket?.title}
+          </Typography>
           <Divider variant="middle" />
           <Box sx={{ my: 2 }}>
             <Typography variant="h6">Repair Request Details</Typography>

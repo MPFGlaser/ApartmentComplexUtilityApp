@@ -5,29 +5,44 @@
   "projectType": "application",
   "targets": {
     "e2e": {
-      "executor": "@nx/cypress:cypress",
+      "executor": "@gnuechtel/nx-cucumber:cucumber-api",
+      "outputs": [
+        "{workspaceRoot}/dist/cucumber-js/apps/acua-e2e",
+        "{workspaceRoot}/dist/coverage/apps/acua-e2e"
+      ],
       "options": {
-        "cypressConfig": "apps/acua-e2e/cypress.config.ts",
-        "devServerTarget": "acua:serve:development",
-        "testingType": "e2e"
-      },
-      "configurations": {
-        "production": {
-          "devServerTarget": "acua:serve:production"
+        "featuresDirectory": "apps/acua-e2e/features",
+        "tags": "not @ignore",
+        "testRunner": "playwright",
+        "baseUrl": "http://localhost:4200",
+        "devServerTarget": "acua:serve",
+        "disableVideoFiles": false,
+        "disableVideoAttachments": true,
+        "additionalPlaywrightConfiguration": {
+          "acceptDownloads": true
         },
-        "ci": {
-          "devServerTarget": "acua:serve-static"
+        "reportOptions": {
+          "reports": ["html-built-in", "html-beautiful"]
         }
       }
     },
+    "e2e-watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx nx e2e acua-e2e --exit-zero --watch-message",
+          "npx nx watch --projects=acua-e2e -- npx nx e2e acua-e2e --exit-zero --watch-message"
+        ],
+        "parallel": false
+      }
+    },
     "lint": {
-      "executor": "@nx/eslint:lint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/acua-e2e/**/*.{js,ts}"]
+        "lintFilePatterns": ["apps/acua-e2e/**/*.ts"]
       }
     }
   },
-  "tags": [],
   "implicitDependencies": ["acua"]
 }

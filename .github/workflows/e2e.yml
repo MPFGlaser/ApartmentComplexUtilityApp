@@ -28,14 +28,27 @@ jobs:
           node-version: 20
           cache: 'npm'
       - name: 'Setup Firebase Emulator cache'
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/firebase/emulators
           key: ${{ runner.os }}-firebase-emulators-${{ hashFiles('~/.cache/firebase/emulators/**') }}
+      - name: 'Cache Playwright browsers'
+        uses: actions/cache@v3
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
       - name: 'Download Node Dependencies'
         run: npm ci
       - name: 'Download Firebase CLI'
         run: npm install -g firebase-tools
+      - name: 'Download Playwright browsers'
+        run: npx playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: 'Restore Playwright browsers cache'
+        run: npx playwright install-deps
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
       - name: 'Build pre-seeded database images'
         run: |
           docker build -t locationdb-e2e -f ./e2e/database-seeding/locationdb/Dockerfile ./e2e/database-seeding/locationdb
@@ -43,34 +56,21 @@ jobs:
       - name: 'Start Docker Compose'
         run: |
           docker compose -f ./e2e/docker-compose.yaml up --detach
-          sleep 10
-      - name: Wait for Containers to be Healthy
+          chmod +x ./scripts/wait-for-containers.sh
+          ./scripts/wait-for-containers.sh
+      - name: 'Setup environment variables'
         run: |
-          # Retry for a certain period until both containers are healthy
-          for i in {1..30}; do
-            locationdb_health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json locationdb | grep -q '"Health":"healthy"' && echo true || echo false)
-            ticketdb_health=$(docker compose -f ./e2e/docker-compose.yaml ps --format json ticketdb | grep -q '"Health":"healthy"' && echo true || echo false)
-
-            if [ -n "$locationdb_health" ] && [ -n "$ticketdb_health" ]; then
-              break
-            fi
-
-            sleep 10
-          done
-
-          # Fail the workflow if both containers are not healthy after retries
-          if [ -z "$locationdb_health" ] || [ -z "$ticketdb_health" ]; then
-            exit 1
-          fi
-      - name: 'Start ACUA microservices stack'
-        run: |
-          npx nx run-many --target=serve --maxParallel=100 --exclude acua &
+          cp ./apps/acua/dotenv.e2e.example ./apps/acua/.env
+          cp ./apps/location-service/dotenv.e2e.example ./apps/location-service/.env
+          cp ./apps/ticket-service/dotenv.e2e.example ./apps/ticket-service/.env
+          cp ./apps/user-service/dotenv.e2e.example ./apps/user-service/.env
       - name: 'Run Firebase Emulator and e2e tests on ACUA frontend'
         run: |
-          firebase emulators:exec --import=./e2e/firebase-emulator-data 'npx nx e2e acua-e2e'
-      - name: 'Upload screenshots'
+          chmod +x ./scripts/run-e2e.sh
+          firebase emulators:exec --import=./e2e/firebase-emulator-data './scripts/run-e2e.sh'
+      - name: 'Upload report'
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: cypress-screenshots
-          path: dist/cypress/apps/acua-e2e/screenshots
+          name: playwright-report
+          path: dist/cucumber-js/apps/acua-e2e/reports/html/cucumber-test-report.html

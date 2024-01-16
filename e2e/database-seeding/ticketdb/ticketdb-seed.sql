@@ -5,7 +5,7 @@
 -- Dumped from database version 15.4 (Debian 15.4-1.pgdg120+1)
 -- Dumped by pg_dump version 15.3
 
--- Started on 2024-01-13 15:44:21 CET
+-- Started on 2024-01-14 21:48:20 CET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,27 +19,20 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 3350 (class 1262 OID 16384)
--- Name: ticketdb; Type: DATABASE; Schema: -; Owner: ticketdb
+-- TOC entry 837 (class 1247 OID 16390)
+-- Name: enum_Tickets_status; Type: TYPE; Schema: public; Owner: ticketdb
 --
 
-CREATE DATABASE ticketdb WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8';
+CREATE TYPE public."enum_Tickets_status" AS ENUM (
+    'open',
+    'pending',
+    'inprogress',
+    'completed',
+    'wontfix'
+);
 
 
-ALTER DATABASE ticketdb OWNER TO ticketdb;
-
-\connect ticketdb
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
+ALTER TYPE public."enum_Tickets_status" OWNER TO ticketdb;
 
 SET default_tablespace = '';
 
@@ -66,7 +59,7 @@ CREATE TABLE public."Tickets" (
 ALTER TABLE public."Tickets" OWNER TO ticketdb;
 
 --
--- TOC entry 3344 (class 0 OID 16401)
+-- TOC entry 3346 (class 0 OID 16401)
 -- Dependencies: 214
 -- Data for Name: Tickets; Type: TABLE DATA; Schema: public; Owner: ticketdb
 --
@@ -77,7 +70,7 @@ INSERT INTO public."Tickets" (id, creator, location, title, description, status,
 
 
 --
--- TOC entry 3201 (class 2606 OID 16408)
+-- TOC entry 3203 (class 2606 OID 16408)
 -- Name: Tickets Tickets_pkey; Type: CONSTRAINT; Schema: public; Owner: ticketdb
 --
 
@@ -85,7 +78,7 @@ ALTER TABLE ONLY public."Tickets"
     ADD CONSTRAINT "Tickets_pkey" PRIMARY KEY (id);
 
 
--- Completed on 2024-01-13 15:44:21 CET
+-- Completed on 2024-01-14 21:48:20 CET
 
 --
 -- PostgreSQL database dump complete

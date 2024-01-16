@@ -6,10 +6,18 @@ import { TicketStatus } from '../enums/TicketStatus.enum';
 class TicketService extends ApiService {
   private url = `${this.baseUrl}/ticket`;
 
-  public async getTickets() {
-    const response: AxiosResponse<ITicket[]> = await axios.get(this.url);
-
-    return response.data;
+  public async getTickets(retries = 3, delay = 1000): Promise<ITicket[]> {
+    try {
+      const response: AxiosResponse<ITicket[]> = await axios.get(this.url);
+      return response.data;
+    } catch (error) {
+      if (retries > 0) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        return this.getTickets(retries - 1, delay);
+      } else {
+        throw error;
+      }
+    }
   }
 
   public async getTicketById(id: string) {

@@ -1,0 +1,2 @@
+# Backend ('/api' for development)
+VITE_API_URL = '/api'

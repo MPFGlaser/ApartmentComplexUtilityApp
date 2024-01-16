@@ -55,6 +55,7 @@ export default function Navigation(props: Readonly<NavigationProps>) {
             component={Link}
             to="/login"
             onClick={handleDrawerToggle}
+            data-testid="navigation-login-button"
           >
             Login
           </Button>
@@ -63,6 +64,7 @@ export default function Navigation(props: Readonly<NavigationProps>) {
             component={Link}
             to="/signup"
             onClick={handleDrawerToggle}
+            data-testid="navigation-signup-button"
           >
             Sign up
           </Button>
@@ -77,7 +79,11 @@ export default function Navigation(props: Readonly<NavigationProps>) {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography variant="h6" component="h1">
+          <Typography
+            variant="h6"
+            component="h1"
+            data-testid="navigation-display-name"
+          >
             {currentUser.displayName}
           </Typography>
           <Box display="flex">
@@ -91,6 +97,7 @@ export default function Navigation(props: Readonly<NavigationProps>) {
             <IconButton
               component={Link}
               to="/"
+              data-testid="navigation-signout-button"
               onClick={(e) => {
                 handleDrawerToggle();
                 handleSignout();
@@ -121,6 +128,7 @@ export default function Navigation(props: Readonly<NavigationProps>) {
             to={item.path}
             style={{ textDecoration: 'none', color: 'inherit' }}
             onClick={handleDrawerToggle}
+            data-testid={item.testid}
           >
             <ListItemButton>
               <ListItemIcon>{item.icon}</ListItemIcon>

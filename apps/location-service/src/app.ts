@@ -38,7 +38,7 @@ initializeSubscriber(
 
 app.use(cors(corsOptions));
 
-app.use('/', healthRoute);
+app.use('/health', healthRoute);
 
 app.use(authenticated());
 

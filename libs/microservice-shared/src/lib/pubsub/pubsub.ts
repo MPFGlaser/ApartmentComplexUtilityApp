@@ -21,8 +21,16 @@ export async function getTopic(topicName: string) {
   const topic = pubsub.topic(topicName);
   const [exists] = await topic.exists();
   if (!exists) {
-    await topic.create();
-    console.log(`Topic ${topicName} created.`);
+    try {
+      await topic.create();
+      console.log(`Topic ${topicName} created.`);
+    } catch (error) {
+      if ((error as { code: number }).code !== 6) {
+        // 6 is the error code for 'ALREADY_EXISTS'
+        throw error;
+      }
+      console.log(`Topic ${topicName} already exists.`);
+    }
   }
   return topic;
 }
