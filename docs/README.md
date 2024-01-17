@@ -58,3 +58,7 @@ Some misuse cases have been identified for ACUA. These can be found [here](./mis
 ## Security Requirements
 
 Based on the above documents, some security requirements have been identified. These can be found [here](./security-requirements.md).
+
+## Load Testing
+
+To read about the load testing performed on ACUA, click [here](./loadtest.md).
