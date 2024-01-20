@@ -99,49 +99,16 @@ Set up the docker environment for development
 docker-compose -f docker-compose-dev.yaml up
 ```
 
-Set up gcloud cli (download and install from [here](https://cloud.google.com/sdk/docs/install))
+Set up firebase cli (download and install from [here](https://firebase.google.com/docs/cli))
 
 ```sh
-gcloud auth login
+firebase init
 ```
 
-Set the project
+Install and initialise the firebase emulator suite. You'll need 'Authentication' and 'Pub/Sub' enabled.
 
 ```sh
-gcloud config set project mpfg-acua
-```
-
-Set up the Application Default Credentials
-
-```sh
-gcloud auth application-default login
-```
-
-Set the quota project
-
-```sh
-gcloud auth application-default set-quota-project mpfg-acua
-```
-
-Follow the steps [here](https://firebase.google.com/docs/admin/setup#testing_with_gcloud_end_user_credentials) to set up an OAuth 2.0 client ID for the Firebase Admin SDK, since it doesn't support end user credentials. \
-Download the key, name it `oauth2.0-client.key.json` and place it in the root directory of the project.
-
-Set the impersonated service account
-
-```sh
-gcloud auth application-default login --client-id-file=./oauth2.0-client.key.json
-```
-
-Start the gcloud pubsub emulator
-
-```sh
-gcloud beta emulators pubsub start --project=mpfg-acua-dev
-```
-
-Set up the gcloud pubsub emulator environment variables. Run this in the terminal you wish to use to run the project, or alternatively, add it to your `.bashrc` or `.zshrc` file.
-
-```sh
-$(gcloud beta emulators pubsub env-init)
+firebase init emulators
 ```
 
 **For each app individually**

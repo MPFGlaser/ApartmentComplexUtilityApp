@@ -62,3 +62,7 @@ Based on the above documents, some security requirements have been identified. T
 ## Load Testing
 
 To read about the load testing performed on ACUA, click [here](./loadtest.md).
+
+## CI/CD
+
+The CI/CD pipeline makes use of GitHub Actions. It has several steps, described in [this document](./cicd.md).
