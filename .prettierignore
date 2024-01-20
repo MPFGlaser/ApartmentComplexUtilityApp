@@ -4,3 +4,4 @@
 /.nx/cache
 /kubernetes
 /e2e
+/docs/**/*.json
